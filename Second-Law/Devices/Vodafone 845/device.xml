@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>845</name>
+	<model>U8120</model>
+	<vendor>Vodafone</vendor>
+	<manufacturer>Huawei</manufacturer>
+	<links>
+		<product-page>http://www.vodafone.co.nz/MEDIA_CustomProductCatalog/m4080131_V845_Product_Datasheet.pdf</product-page>
+		<support-page>http://www.huaweidevice.com/worldwide/technicaIndex.do?method=index&amp;directoryId=5003</support-page>
+	</links>
+
+	<usb-devices>
+		<device type="root" vendorId="0x12d1" productId="0x1035" />
+		<device type="modem" vendorId="0x12d1" productId="0x1035" mi="0x00" />
+		<device type="install-cdrom" vendorId="0x12d1" productId="0x1035" mi="0x02" />
+		<device type="debug-bridge" vendorId="0x12d1" productId="0x1035" mi="0x03" />
+		<device type="mass-storage" vendorId="0x12d1" productId="0x1005" />
+	</usb-devices>
+
+	<form-factor>phone</form-factor>
+	<screen>
+		<diagonal-size inches="2.8" />
+		<resolution width="240" height="320" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="touch" />
+		<feature name="phone" />
+		<feature name="3g" />
+		<feature name="rear-camera" />
+		<feature name="sdcard" />
+	</has-features>
+</device>

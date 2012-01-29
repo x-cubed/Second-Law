@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>Kindle Fire</name>
+	<vendor>Amazon</vendor>
+	<links>
+		<product-page>http://www.amazon.com/gp/product/B0051VVOB2</product-page>
+		<support-page>http://www.amazon.com/gp/help/customer/display.html?ie=UTF8&amp;nodeId=200711000</support-page>
+	</links>
+
+	<usb-devices>
+		<device type="fast-boot" vendorId="0x18d1" productId="0x0100" />
+		<device type="mass-storage" vendorId="0x1949" productId="0x0005" />
+		<device type="mass-storage" vendorId="0x1949" productId="0x0006" mi="0x00" />
+		<device type="debug-bridge" vendorId="0x1949" productId="0x0006" mi="0x01" />
+	</usb-devices>
+	
+	<form-factor>tablet</form-factor>
+	<screen>
+		<diagonal-size inches="7" />
+		<resolution width="600" height="1024" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="touch" />
+		<feature name="multitouch" />
+		<feature name="sdcard" />
+	</has-features>
+</device>
