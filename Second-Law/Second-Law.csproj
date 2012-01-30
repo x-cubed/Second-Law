@@ -81,6 +81,12 @@
     <Compile Include="SupportedDevice.cs" />
     <Compile Include="SupportedDevices.cs" />
     <Compile Include="UsbDevice.cs" />
+    <Compile Include="UsbDeviceList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UsbDeviceList.Designer.cs">
+      <DependentUpon>UsbDeviceList.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -94,6 +100,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UsbDeviceList.resx">
+      <DependentUpon>UsbDeviceList.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -112,7 +121,9 @@
     <Content Include="Devices\Motorola Milestone\device.jpg" />
     <Content Include="Devices\Motorola Milestone\device.xml" />
     <Content Include="Devices\Vodafone 845\device.jpg" />
-    <Content Include="Devices\Vodafone 845\device.xml" />
+    <Content Include="Devices\Vodafone 845\device.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />

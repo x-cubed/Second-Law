@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using SecondLaw.Properties;
@@ -17,6 +18,7 @@ namespace SecondLaw {
 			_hardware.DeviceInterfaceChanged += Hardware_DeviceInterfaceChanged;
 			_hardware.RegisterNotifications(this);
 
+			tslStatus.Text = "Waiting for device...";
 			ScanForUsbDevices();
 		}
 
@@ -34,48 +36,53 @@ namespace SecondLaw {
 		}
 
 		private void ScanForUsbDevices() {
+			tslStatus.Text = "Scanning...";
+			pnlScanning.Visible = true;
+			pnlDevice.Visible = false;
+			prgScanning.Visible = true;
+
+			SupportedDevice supportedDevice = null;
 			var devices = _hardware.EnumerateUsbDevices();
-			lsvDevices.Items.Clear();
-			lsvDevices.Columns.Clear();
-			lsvDevices.Columns.Add("Name", 250);
-			lsvDevices.Columns.Add("Manufacturer", 250);
-			lsvDevices.Columns.Add("Configuration", 100);
-			lsvDevices.Columns.Add("Vendor ID", 100);
-			lsvDevices.Columns.Add("Product ID", 100);
-			lsvDevices.Columns.Add("Revision", 100);
-			lsvDevices.Columns.Add("Interface ID", 100);
-			lsvDevices.Columns.Add("Location Information", 250);
-			lsvDevices.Columns.Add("Physical Device Object Name", 500);
-			lsvDevices.Columns.Add("Hardware IDs", 500);
-
-			tslStatus.Text = "Ready";
 			foreach (var usbDevice in devices) {
-				var deviceItem = new ListViewItem(new[] {
-				  usbDevice.DeviceDescription,
-					usbDevice.Manufacturer,
-					usbDevice.Configuration.ToString(),
-					usbDevice.VendorId.ToString("X4"),
-					usbDevice.ProductId.ToString("X4"),
-					usbDevice.Revision.ToString("X4"),
-					(usbDevice.InterfaceId == 0xFFFF) ? "" : usbDevice.InterfaceId.ToString("X2"),
-					usbDevice.LocationInformation,
-					usbDevice.PhysicalDeviceObjectName,
-					string.Join(", ", usbDevice.HardwareIds)
-				});
-
 				// Load the device icons
 				string imageKey = usbDevice.PhysicalDeviceObjectName;
 				LoadImage(imageKey, usbDevice.LargeIcon, imlLargeIcons);
 				LoadImage(imageKey, usbDevice.SmallIcon, imlSmallIcons);
-				deviceItem.ImageKey = imageKey;
 
-				var supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId, usbDevice.Revision, usbDevice.InterfaceId);
+				supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId, usbDevice.Revision, usbDevice.InterfaceId);
 				if (supportedDevice != null) {
-					deviceItem.BackColor = Color.Gold;
-					tslStatus.Text = supportedDevice.DeviceName;
+					break;
 				}
+			}
 
-				lsvDevices.Items.Add(deviceItem);
+			prgScanning.Visible = false;
+			if (supportedDevice != null) {
+				tslStatus.Text = "Found a " + supportedDevice.ProductName;
+				DisplayDeviceInformation(supportedDevice);
+				pnlScanning.Visible = false;
+				pnlDevice.Visible = true;
+			} else {
+				tslStatus.Text = "Waiting for device...";
+			}
+		}
+
+		private void DisplayDeviceInformation(SupportedDevice device) {
+			SetLink(lnkDeviceName, device.DeviceName, device.ProductPage);
+			SetLink(lnkVendor, device.VendorName, device.SupportPage);
+			SetLink(lnkManufacturer, device.ManufacturerName, device.ManufacturerPage);
+			picDevice.Image = device.DeviceImage;
+		}
+
+		private void SetLink(LinkLabel link, string caption, Uri uri) {
+			link.Text = caption;
+			link.Links.Clear();
+			if ((caption != null) && (uri != null)) {
+				link.Links.Add(0, caption.Length, uri);
+				toolTip.SetToolTip(link, uri.ToString());
+				link.Enabled = true;
+			} else {
+				toolTip.SetToolTip(link, null);
+				link.Enabled = false;
 			}
 		}
 
@@ -85,15 +92,15 @@ namespace SecondLaw {
 			}
 		}
 
-		private void exitToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
 			Application.Exit();
 		}
 
-		private void viewlogToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void viewlogToolStripMenuItem_Click(object sender, EventArgs e) {
 			Process.Start(_pathToADB, "logcat");
 		}
 
-		private void systemInformationToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void systemInformationToolStripMenuItem_Click(object sender, EventArgs e) {
 			var output = RunADBCommand("shell cat /proc/cpuinfo;cat /proc/meminfo");
 			MessageBox.Show(output, "System Information");
 		}
@@ -134,6 +141,13 @@ namespace SecondLaw {
 		private void bootloaderToolStripMenuItem_Click(object sender, System.EventArgs e) {
 			var output = RunADBCommand("reboot bootloader") ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Bootloader");
+		}
+
+		private void Link_Clicked(object sender, LinkLabelLinkClickedEventArgs e) {
+			var url = (Uri) e.Link.LinkData;
+			if (url != null) {
+				Process.Start(url.ToString());
+			}
 		}
 	}
 }

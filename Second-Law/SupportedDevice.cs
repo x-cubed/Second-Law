@@ -1,18 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Xml;
 
 namespace SecondLaw {
 	class SupportedDevice {
-		public SupportedDevice(FileInfo deviceXml) {
-			var xml = new XmlDocument();
-			xml.Load(deviceXml.FullName);
+		private readonly DirectoryInfo _deviceFolder;
 
-			DeviceName = xml.SelectSingleNode("/device/name/text()").Value;
+		public SupportedDevice(DirectoryInfo deviceFolder) {
+			_deviceFolder = deviceFolder;
+			ParseDeviceXml(Path.Combine(deviceFolder.FullName, "device.xml"));
+		}
+
+		private void ParseDeviceXml(string deviceXmlPath) {
+			var xml = new XmlDocument();
+			xml.Load(deviceXmlPath);
+
+			DeviceName = GetOptionalXmlText(xml, "/device/name/text()");
+			VendorName = GetOptionalXmlText(xml, "/device/vendor/text()");
+			ManufacturerName = GetOptionalXmlText(xml, "/device/manufacturer/text()");
+
+			ProductPage = GetOptionalXmlUri(xml, "/device/links/product-page/text()");
+			SupportPage = GetOptionalXmlUri(xml, "/device/links/support-page/text()");
 
 			IEnumerable<XmlNode> usbDevices = (xml.SelectNodes("/device/usb-devices/*") ?? (IEnumerable)new XmlNode[0]).Cast<XmlNode>();
 			foreach (var usbDevice in usbDevices) {
@@ -26,7 +41,36 @@ namespace SecondLaw {
 			}
 		}
 
+		private static Uri GetOptionalXmlUri(XmlDocument xml, string xPath) {
+			string text = GetOptionalXmlText(xml, xPath);
+			Uri uri;
+			return (Uri.TryCreate(text, UriKind.Absolute, out uri)) ? uri : null;
+		}
+
+		private static string GetOptionalXmlText(XmlDocument xml, string xPath) {
+			XmlNode node = xml.SelectSingleNode(xPath);
+			return (node == null) ? null : node.Value;
+		}
+
+		public string ProductName {
+			get { return (VendorName ?? ManufacturerName) + " " + DeviceName; }
+		}
+
+		public Image DeviceImage {
+			get {
+				var imageFile = _deviceFolder.GetFiles("device.jpg").FirstOrDefault();
+				return (imageFile == null) ? null : Image.FromFile(imageFile.FullName);
+			}
+		}
+
 		public string DeviceName { get; private set; }
+		public Uri ProductPage { get; private set; }
+
+		public string VendorName { get; private set; }
+		public Uri SupportPage { get; private set; }
+
+		public string ManufacturerName { get; private set; }
+		public Uri ManufacturerPage { get; private set; }
 
 		public ushort VendorId { get; private set; }
 		public ushort ProductId { get; private set; }

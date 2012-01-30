@@ -9,9 +9,8 @@ namespace SecondLaw {
 		public SupportedDevices() {
 			var devicesFolder = new DirectoryInfo("..\\..\\Devices");
 			foreach (var deviceFolder in devicesFolder.EnumerateDirectories()) {
-				var deviceXml = new FileInfo(Path.Combine(deviceFolder.FullName, "device.xml"));
-				var device = new SupportedDevice(deviceXml);
-				Debug.Print("SupportedDevices(): {0}\r\n{1}", deviceXml.FullName, device);
+				var device = new SupportedDevice(deviceFolder);
+				Debug.Print("SupportedDevices(): {0}\r\n{1}", deviceFolder.FullName, device);
 				Add(device);
 			}
 		}
