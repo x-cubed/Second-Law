@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdbDaemon.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Hardware.cs" />
     <Compile Include="MainForm.cs">

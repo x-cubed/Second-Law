@@ -2,18 +2,14 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using SecondLaw.Properties;
 
 namespace SecondLaw {
 	public partial class MainForm : Form {
 		private readonly Hardware _hardware = new Hardware();
 		private readonly SupportedDevices _supportedDevices = new SupportedDevices();
-		private readonly string _pathToADB;
-
+		
 		public MainForm() {
 			InitializeComponent();
-
-			_pathToADB = Settings.Default.PathToADK + "\\platform-tools\\adb.exe";
 
 			_hardware.DeviceInterfaceChanged += Hardware_DeviceInterfaceChanged;
 			_hardware.RegisterNotifications(this);
@@ -68,6 +64,7 @@ namespace SecondLaw {
 
 		private void DisplayDeviceInformation(SupportedDevice device) {
 			SetLink(lnkDeviceName, device.DeviceName, device.ProductPage);
+			lblSystemVersion.Text = AdbDaemon.GetSystemVersion();
 			SetLink(lnkVendor, device.VendorName, device.SupportPage);
 			SetLink(lnkManufacturer, device.ManufacturerName, device.ManufacturerPage);
 			picDevice.Image = device.DeviceImage;
@@ -97,49 +94,25 @@ namespace SecondLaw {
 		}
 
 		private void viewlogToolStripMenuItem_Click(object sender, EventArgs e) {
-			Process.Start(_pathToADB, "logcat");
+			AdbDaemon.LaunchLogCat();
 		}
 
 		private void systemInformationToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = RunADBCommand("shell cat /proc/cpuinfo;cat /proc/meminfo");
-			MessageBox.Show(output, "System Information");
-		}
-
-		private string RunADBCommand(string adbArguments) {
-			var process = new Process();
-			process.StartInfo.FileName = _pathToADB;
-			process.StartInfo.Arguments = adbArguments;
-			process.StartInfo.RedirectStandardError = true;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.CreateNoWindow = true;
-			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			process.Start();
-
-			string result;
-			using (var output = process.StandardOutput) {
-				using (var error = process.StandardError) {
-					result = output.ReadToEnd();
-					result += error.ReadToEnd();
-				}
-			}
-			result = result.Replace("\r\r", "\r");
-			result = result.Trim();
-			return (result == "") ? null : result;
+			MessageBox.Show(AdbDaemon.GetSystemInformation(), "System Information");
 		}
 
 		private void normalToolStripMenuItem_Click(object sender, System.EventArgs e) {
-			var output = RunADBCommand("reboot") ?? "Device is rebooting";
+			var output = AdbDaemon.Reboot() ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Normal");
 		}
 
 		private void recoveryToolStripMenuItem_Click(object sender, System.EventArgs e) {
-			var output = RunADBCommand("reboot recovery") ?? "Device is rebooting";
+			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Recovery) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Recovery");
 		}
 
 		private void bootloaderToolStripMenuItem_Click(object sender, System.EventArgs e) {
-			var output = RunADBCommand("reboot bootloader") ?? "Device is rebooting";
+			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Bootloader) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Bootloader");
 		}
 
