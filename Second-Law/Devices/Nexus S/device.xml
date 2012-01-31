@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>Nexus S</name>
+	<vendor>Google/Samsung</vendor>
+	<links>
+		<product-page>http://www.google.com/phone/detail/nexus-s</product-page>
+	</links>
+
+	<usb-devices>
+		<device type="fast-boot" vendorId="0x18d1" productId="0x4e22" />
+	</usb-devices>
+	
+	<form-factor>phone</form-factor>
+	<screen>
+		<diagonal-size inches="4" />
+		<resolution width="480" height="800" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="bluetooth" />
+		<feature name="NFC" />
+		<feature name="3G" />
+		<feature name="touch" />
+		<feature name="multitouch" />
+		<feature name="micro sdcard" />
+		<feature name="GPS" />
+		<feature name="accelerometer" />
+		<feature name="compass" />
+		<feature name="camera front" />
+		<feature name="camera rear" />
+	</has-features>
+</device>

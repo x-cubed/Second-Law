@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>Transformer</name>
+	<vendor>ASUS</vendor>
+	<model>TF101</model>
+	<links>
+		<product-page>http://www.asus.com/Eee/Eee_Pad/Eee_Pad_Transformer_TF101/</product-page>
+		<support-page>http://www.transformerforums.com/forum/asus-transformer-help/</support-page>
+	</links>
+
+	<usb-devices>
+		<device type="fast-boot" vendorId="0x0b05" productId="0x4e1f" />
+	</usb-devices>
+	
+	<form-factor>tablet</form-factor>
+	<screen>
+		<diagonal-size inches="10.1" />
+		<resolution width="1280" height="800" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="touch" />
+		<feature name="multitouch" />
+		<feature name="sdcard" />
+		<feature name="micro sdcard" />
+		<feature name="GPS" />
+		<feature name="accelerometer" />
+		<feature name="compass" />
+		<feature name="USB" />
+		<feature name="camera front" />
+		<feature name="camera rear" />
+	</has-features>
+</device>
