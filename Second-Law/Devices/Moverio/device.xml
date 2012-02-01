@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>Moverio</name>
+	<vendor>Epson</vendor>
+	<model>BT100</model>
+	<links>
+		<product-page>http://www.epson.jp/products/moverio/</product-page>
+	</links>
+
+	<usb-devices>
+		<device type="fast-boot" vendorId="0x04b8" productId="0c04" />
+	</usb-devices>
+	
+	<form-factor>glasses</form-factor>
+	<screen>
+		<diagonal-size inches="0.52" />
+		<resolution width="960" height="540" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="touch" />
+		<feature name="micro sdcard" />
+		<feature name="3D" />
+		<feature name="Transparent" />
+	</has-features>
+</device>
