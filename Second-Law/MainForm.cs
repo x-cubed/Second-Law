@@ -7,7 +7,8 @@ namespace SecondLaw {
 	public partial class MainForm : Form {
 		private readonly Hardware _hardware = new Hardware();
 		private readonly SupportedDevices _supportedDevices = new SupportedDevices();
-		
+		private readonly Timer _scanForDevices = new Timer();
+
 		public MainForm() {
 			InitializeComponent();
 
@@ -15,11 +16,18 @@ namespace SecondLaw {
 			_hardware.RegisterNotifications(this);
 
 			tslStatus.Text = "Waiting for device...";
+			_scanForDevices.Interval = 500;
+			_scanForDevices.Tick += ScanForDevices_Tick;
+			_scanForDevices.Enabled = true;
+		}
+
+		private void ScanForDevices_Tick(object sender, EventArgs e) {
+			_scanForDevices.Enabled = false;
 			ScanForUsbDevices();
 		}
 
 		private void Hardware_DeviceInterfaceChanged(object sender, DeviceInterfaceChangedArgs e) {
-			ScanForUsbDevices();
+			_scanForDevices.Enabled = true;
 		}
 
 		protected override void WndProc(ref Message m) {
@@ -27,7 +35,7 @@ namespace SecondLaw {
 			_hardware.WndProc(ref m);
 		}
 
-		private void mniFileScanForDevices_Click(object sender, System.EventArgs e) {
+		private void mniFileScanForDevices_Click(object sender, EventArgs e) {
 			ScanForUsbDevices();
 		}
 
@@ -64,7 +72,8 @@ namespace SecondLaw {
 
 		private void DisplayDeviceInformation(SupportedDevice device) {
 			SetLink(lnkDeviceName, device.DeviceName, device.ProductPage);
-			lblSystemVersion.Text = AdbDaemon.GetSystemVersion();
+			lblSerialNumber.Text = AdbDaemon.GetSerialNumber() ?? "(Unknown)";
+			lblSystemVersion.Text = AdbDaemon.GetSystemVersion() ?? "(Unknown)";
 			SetLink(lnkVendor, device.VendorName, device.SupportPage);
 			SetLink(lnkManufacturer, device.ManufacturerName, device.ManufacturerPage);
 			picDevice.Image = device.DeviceImage;
@@ -101,17 +110,17 @@ namespace SecondLaw {
 			MessageBox.Show(AdbDaemon.GetSystemInformation(), "System Information");
 		}
 
-		private void normalToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void normalToolStripMenuItem_Click(object sender, EventArgs e) {
 			var output = AdbDaemon.Reboot() ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Normal");
 		}
 
-		private void recoveryToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void recoveryToolStripMenuItem_Click(object sender, EventArgs e) {
 			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Recovery) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Recovery");
 		}
 
-		private void bootloaderToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void bootloaderToolStripMenuItem_Click(object sender, EventArgs e) {
 			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Bootloader) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Bootloader");
 		}
