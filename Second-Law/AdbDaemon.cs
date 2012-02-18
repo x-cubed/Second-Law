@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using SecondLaw.Properties;
@@ -35,7 +36,7 @@ namespace SecondLaw {
 			get { return Path.Combine(Settings.Default.PathToADK, "platform-tools", "adb.exe"); }
 		}
 
-		private static string RunADBCommand(string adbArguments) {
+		private static string RunADBCommand(string adbArguments, out string errorMessages) {
 			var process = new Process();
 			process.StartInfo.FileName = PathToADB;
 			process.StartInfo.Arguments = adbArguments;
@@ -50,7 +51,7 @@ namespace SecondLaw {
 			using (var output = process.StandardOutput) {
 				using (var error = process.StandardError) {
 					result = output.ReadToEnd();
-					result += error.ReadToEnd();
+					errorMessages = error.ReadToEnd();
 				}
 			}
 			result = result.Replace("\r\r", "\r");
@@ -59,15 +60,24 @@ namespace SecondLaw {
 		}
 
 		public static Dictionary<string, string> GetBuildProperties() {
-			var text = RunADBCommand("shell cat /system/build.prop");
+			string errorMessages;
+			var text = RunADBCommand("shell cat /system/build.prop", out errorMessages);
+			if (!string.IsNullOrEmpty(errorMessages)) {
+				throw new Exception(errorMessages);
+			}
+
 			var lines = text.Split('\r', '\n');
 
 			var buildProps = new Dictionary<string, string>();
 			foreach (string line in lines) {
 				string cleanLine = line.Trim();
 				if ((cleanLine != "") && (cleanLine[0] != '#')) {
-					string[] kvp = cleanLine.Split('=');
-					buildProps[kvp[0]] = kvp[1];
+					string[] kvp = cleanLine.Split(new[] { '=' }, 2);
+					if (kvp.Length == 1) {
+						Debug.WriteLine("Ignoring invalid build property: \"{0}\"", kvp[0]);
+					} else {
+						buildProps[kvp[0]] = kvp[1];
+					}
 				}
 			}
 			return buildProps;
@@ -79,7 +89,10 @@ namespace SecondLaw {
 		}
 
 		public static string GetSystemInformation() {
-			return RunADBCommand("shell cat /proc/cpuinfo;cat /proc/meminfo");
+			string errorMessages;
+			string output = RunADBCommand("shell cat /proc/cpuinfo;cat /proc/meminfo", out errorMessages);
+			output += Environment.NewLine + errorMessages;
+			return output;
 		}
 
 		public static string Reboot(RebootMode mode = RebootMode.Normal) {
@@ -95,7 +108,9 @@ namespace SecondLaw {
 					command = "reboot";
 					break;
 			}
-			return RunADBCommand(command);
+			string errorMessages;
+			RunADBCommand(command, out errorMessages);
+			return errorMessages;
 		}
 
 		public static void LaunchLogCat() {
@@ -103,7 +118,13 @@ namespace SecondLaw {
 		}
 
 		public static string GetSystemVersion() {
-			var buildVersion = GetBuildProperty(AdbDaemon.BUILD_VERSION_SDK);
+			string buildVersion;
+			try {
+				buildVersion = GetBuildProperty(BUILD_VERSION_SDK);
+			} catch (Exception) {
+				return null;
+			}
+
 			byte versionNumber;
 			if (!byte.TryParse(buildVersion, out versionNumber)) {
 				return null;
@@ -113,6 +134,12 @@ namespace SecondLaw {
 				return null;
 			}
 			return version;
+		}
+
+		public static string GetSerialNumber() {
+			string errorMessages;
+			string serial = RunADBCommand("get-serialno", out errorMessages);
+			return (string.IsNullOrEmpty(errorMessages)) ? serial : null;
 		}
 	}
 }
