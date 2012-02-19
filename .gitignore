@@ -1,0 +1,6 @@
+
+*.suo
+*.user
+/_ReSharper.Second-Law
+/Second-Law/bin
+/Second-Law/obj
