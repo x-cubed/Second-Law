@@ -71,11 +71,16 @@ namespace SecondLaw {
 		}
 
 		private void DisplayDeviceInformation(SupportedDevice device) {
-			SetLink(lnkDeviceName, device.DeviceName, device.ProductPage);
+			var props = AdbDaemon.GetBuildProperties();
+			if (props == null) {
+				return;
+			}
+
+			SetLink(lnkDeviceName, device.DeviceName ?? props.ProductModel, device.ProductPage);
 			lblSerialNumber.Text = AdbDaemon.GetSerialNumber() ?? "(Unknown)";
-			lblSystemVersion.Text = AdbDaemon.GetSystemVersion() ?? "(Unknown)";
+			lblSystemVersion.Text = props.SystemVersion ?? "(Unknown)";
 			SetLink(lnkVendor, device.VendorName, device.SupportPage);
-			SetLink(lnkManufacturer, device.ManufacturerName, device.ManufacturerPage);
+			SetLink(lnkManufacturer, device.ManufacturerName ?? props.ProductManufacturer, device.ManufacturerPage);
 			picDevice.Image = device.DeviceImage;
 		}
 
