@@ -1,0 +1,20 @@
+﻿- Identify device vendor and product IDs when connected
+- Implement user-mode ADB driver
+- Install official ADB driver from Android repos
+- Determine device build information from build.props
+
+
+PROCESS
+1. Prompt user to connect device.
+2. Listen for hardware change notifications.
+3. When notifications are received, check VID/PID against database, determine
+	matching mass storage device.
+4. Prompt user to enable debugging and mass storage, if not already enabled.
+5. Determine device build properties.
+6. Download latest scripts for the device.
+7. Determine which scripts are applicable based on current device state.
+	Scripts that are not directly applicable are still displayed if all their
+	dependencies are applicable, eg: allow CM7 install without root access.
+8. Display device information and available scripts, allow the user to choose
+	what they want to do.
+9. Run selected scripts in order of dependencies.
