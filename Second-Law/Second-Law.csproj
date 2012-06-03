@@ -126,6 +126,8 @@
     <Content Include="Devices\Vodafone 845\device.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Devices\Vodafone 858\device.jpg" />
+    <Content Include="Devices\Vodafone 858\device.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
