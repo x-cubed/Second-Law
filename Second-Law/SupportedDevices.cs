@@ -10,8 +10,10 @@ namespace SecondLaw {
 			var devicesFolder = new DirectoryInfo("..\\..\\Devices");
 			foreach (var deviceFolder in devicesFolder.EnumerateDirectories()) {
 				var device = new SupportedDevice(deviceFolder);
-				Debug.Print("SupportedDevices(): {0}\r\n{1}", deviceFolder.FullName, device);
-				Add(device);
+				if (device.VendorId != 0) {
+					Debug.Print("SupportedDevices(): {0}\r\n{1}", deviceFolder.FullName, device);
+					Add(device);
+				}
 			}
 		}
 
@@ -21,8 +23,8 @@ namespace SecondLaw {
 			Func<SupportedDevice, bool> revisionMatches = supportedDevice => !supportedDevice.Revision.HasValue || supportedDevice.Revision == revision;
 			Func<SupportedDevice, bool> interfaceIdMatches = supportedDevice => !supportedDevice.InterfaceId.HasValue || supportedDevice.InterfaceId == interfaceId;
 			return this.FirstOrDefault(supportedDevice =>
-			                           vendorIdMatches(supportedDevice) && productIdMatches(supportedDevice) &&
-			                           revisionMatches(supportedDevice) && interfaceIdMatches(supportedDevice));
+				vendorIdMatches(supportedDevice) && productIdMatches(supportedDevice) &&
+				revisionMatches(supportedDevice) && interfaceIdMatches(supportedDevice));
 		}
 	}
 }
