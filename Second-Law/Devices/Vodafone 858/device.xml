@@ -12,8 +12,9 @@
 	<usb-devices>
 		<device type="root" vendorId="0x12d1" productId="0x1038" />
 		<device type="install-cdrom" vendorId="0x12d1" productId="0x1038" mi="0x00" />
-		<device type="debug-bridge" vendorId="0x12d1" productId="0x1038" mi="0x01" />
 		<device type="mass-storage" vendorId="0x12d1" productId="0x1038" mi="0x00" />
+		<device type="debug-bridge" vendorId="0x12d1" productId="0x1038" mi="0x01" />
+		<device type="network-adapter" vendorId="0x12d1" productId="0x1039" />
 	</usb-devices>
 
 	<form-factor>phone</form-factor>
