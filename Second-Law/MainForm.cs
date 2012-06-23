@@ -47,6 +47,7 @@ namespace SecondLaw {
 
 		private void ScanForUsbDevices() {
 			tslStatus.Text = "Scanning...";
+			mnuDevice.Enabled = false;
 			pnlScanning.Visible = true;
 			pnlDevice.Visible = false;
 			prgScanning.Visible = true;
@@ -73,12 +74,14 @@ namespace SecondLaw {
 		private void DisplayCurrentDevice() {
 			if (_currentDevice != null) {
 				tslStatus.Text = "Found a " + _currentDevice.Metadata.ProductName;
+				mnuDevice.Enabled = true;
 				DisplayDeviceInformation(_currentDevice);
 				DisplayTasksForDevice(_currentDevice);
 				pnlScanning.Visible = false;
 				pnlDevice.Visible = true;
 			} else {
 				tslStatus.Text = "Waiting for device...";
+				mnuDevice.Enabled = false;
 			}
 		}
 

@@ -31,11 +31,11 @@
 			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
 			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
 			this.mnuStrip = new System.Windows.Forms.MenuStrip();
-			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mniFileScanForDevices = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDevice = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewlogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.browseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -46,11 +46,11 @@
 			this.recoveryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.bootloaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.powerOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.repositoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPackages = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.imlLargeIcons = new System.Windows.Forms.ImageList(this.components);
 			this.imlSmallIcons = new System.Windows.Forms.ImageList(this.components);
@@ -89,10 +89,10 @@
 			// mnuStrip
 			// 
 			this.mnuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.deviceToolStripMenuItem,
-            this.repositoriesToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.mnuFile,
+            this.mnuDevice,
+            this.mnuPackages,
+            this.mnuHelp});
 			this.mnuStrip.Location = new System.Drawing.Point(0, 0);
 			this.mnuStrip.Name = "mnuStrip";
 			this.mnuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -100,15 +100,15 @@
 			this.mnuStrip.TabIndex = 0;
 			this.mnuStrip.Text = "menuStrip1";
 			// 
-			// fileToolStripMenuItem
+			// mnuFile
 			// 
-			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mniFileScanForDevices,
             this.toolStripMenuItem3,
             this.exitToolStripMenuItem});
-			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
-			this.fileToolStripMenuItem.Text = "&File";
+			this.mnuFile.Name = "mnuFile";
+			this.mnuFile.Size = new System.Drawing.Size(44, 24);
+			this.mnuFile.Text = "&File";
 			// 
 			// mniFileScanForDevices
 			// 
@@ -129,9 +129,9 @@
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
-			// deviceToolStripMenuItem
+			// mnuDevice
 			// 
-			this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuDevice.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewlogToolStripMenuItem,
             this.browseToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -139,9 +139,9 @@
             this.toolStripMenuItem2,
             this.rebootToolStripMenuItem,
             this.powerOffToolStripMenuItem});
-			this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
-			this.deviceToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
-			this.deviceToolStripMenuItem.Text = "&Device";
+			this.mnuDevice.Name = "mnuDevice";
+			this.mnuDevice.Size = new System.Drawing.Size(66, 24);
+			this.mnuDevice.Text = "&Device";
 			// 
 			// viewlogToolStripMenuItem
 			// 
@@ -210,15 +210,15 @@
 			this.powerOffToolStripMenuItem.Size = new System.Drawing.Size(207, 24);
 			this.powerOffToolStripMenuItem.Text = "&Power Off";
 			// 
-			// repositoriesToolStripMenuItem
+			// mnuPackages
 			// 
-			this.repositoriesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuPackages.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checkForUpdatesToolStripMenuItem,
             this.toolStripMenuItem4,
             this.addToolStripMenuItem});
-			this.repositoriesToolStripMenuItem.Name = "repositoriesToolStripMenuItem";
-			this.repositoriesToolStripMenuItem.Size = new System.Drawing.Size(82, 24);
-			this.repositoriesToolStripMenuItem.Text = "&Packages";
+			this.mnuPackages.Name = "mnuPackages";
+			this.mnuPackages.Size = new System.Drawing.Size(82, 24);
+			this.mnuPackages.Text = "&Packages";
 			// 
 			// checkForUpdatesToolStripMenuItem
 			// 
@@ -237,18 +237,18 @@
 			this.addToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
 			this.addToolStripMenuItem.Text = "&Add repository...";
 			// 
-			// helpToolStripMenuItem
+			// mnuHelp
 			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-			this.helpToolStripMenuItem.Text = "&Help";
+			this.mnuHelp.Name = "mnuHelp";
+			this.mnuHelp.Size = new System.Drawing.Size(53, 24);
+			this.mnuHelp.Text = "&Help";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(119, 24);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
 			this.aboutToolStripMenuItem.Text = "&About";
 			// 
 			// imlLargeIcons
@@ -562,9 +562,9 @@
 		#endregion
 
 		private System.Windows.Forms.MenuStrip mnuStrip;
-		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuFile;
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem deviceToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuDevice;
 		private System.Windows.Forms.ToolStripMenuItem viewlogToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem browseToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
@@ -575,12 +575,12 @@
 		private System.Windows.Forms.ToolStripMenuItem recoveryToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem bootloaderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem powerOffToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuHelp;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ImageList imlLargeIcons;
 		private System.Windows.Forms.ToolStripMenuItem mniFileScanForDevices;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-		private System.Windows.Forms.ToolStripMenuItem repositoriesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuPackages;
 		private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
