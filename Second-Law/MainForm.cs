@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Management.Automation;
 using System.Windows.Forms;
 
 namespace SecondLaw {
@@ -10,6 +11,8 @@ namespace SecondLaw {
 		private readonly Hardware _hardware = new Hardware();
 		private readonly SupportedDevices _supportedDevices = new SupportedDevices();
 		private readonly Timer _scanForDevices = new Timer();
+
+		private DeviceInstance _currentDevice;
 
 		public MainForm() {
 			InitializeComponent();
@@ -48,7 +51,6 @@ namespace SecondLaw {
 			pnlDevice.Visible = false;
 			prgScanning.Visible = true;
 
-			SupportedDevice supportedDevice = null;
 			var devices = _hardware.EnumerateUsbDevices();
 			foreach (var usbDevice in devices) {
 				// Load the device icons
@@ -56,17 +58,23 @@ namespace SecondLaw {
 				LoadImage(imageKey, usbDevice.LargeIcon, imlLargeIcons);
 				LoadImage(imageKey, usbDevice.SmallIcon, imlSmallIcons);
 
-				supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId, usbDevice.Revision, usbDevice.InterfaceId);
+				SupportedDevice supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId,
+																																			usbDevice.Revision, usbDevice.InterfaceId);
 				if (supportedDevice != null) {
+					_currentDevice = new DeviceInstance(supportedDevice, usbDevice);
 					break;
 				}
 			}
 
 			prgScanning.Visible = false;
-			if (supportedDevice != null) {
-				tslStatus.Text = "Found a " + supportedDevice.ProductName;
-				DisplayDeviceInformation(supportedDevice);
-				DisplayTasksForDevice(supportedDevice);
+			DisplayCurrentDevice();
+		}
+
+		private void DisplayCurrentDevice() {
+			if (_currentDevice != null) {
+				tslStatus.Text = "Found a " + _currentDevice.Metadata.ProductName;
+				DisplayDeviceInformation(_currentDevice);
+				DisplayTasksForDevice(_currentDevice);
 				pnlScanning.Visible = false;
 				pnlDevice.Visible = true;
 			} else {
@@ -74,21 +82,21 @@ namespace SecondLaw {
 			}
 		}
 
-		private void DisplayDeviceInformation(SupportedDevice device) {
-			var props = AdbDaemon.GetBuildProperties();
+		private void DisplayDeviceInformation(DeviceInstance device) {
+			var props = DeviceInstance.GetBuildProperties();
 			if (props == null) {
 				return;
 			}
 
-			SetLink(lnkDeviceName, device.DeviceName ?? props.ProductModel, device.ProductPage);
-			lblSerialNumber.Text = AdbDaemon.GetSerialNumber() ?? "(Unknown)";
+			SetLink(lnkDeviceName, device.Metadata.DeviceName ?? props.ProductModel, device.Metadata.ProductPage);
+			lblSerialNumber.Text = device.GetSerialNumber() ?? "(Unknown)";
 			lblSystemVersion.Text = props.SystemVersion ?? "(Unknown)";
-			SetLink(lnkVendor, device.VendorName, device.SupportPage);
-			SetLink(lnkManufacturer, device.ManufacturerName ?? props.ProductManufacturer, device.ManufacturerPage);
-			picDevice.Image = device.DeviceImage;
+			SetLink(lnkVendor, device.Metadata.VendorName, device.Metadata.SupportPage);
+			SetLink(lnkManufacturer, device.Metadata.ManufacturerName ?? props.ProductManufacturer, device.Metadata.ManufacturerPage);
+			picDevice.Image = device.Metadata.DeviceImage;
 		}
 
-		private void DisplayTasksForDevice(SupportedDevice device) {
+		private void DisplayTasksForDevice(DeviceInstance device) {
 			lsvScripts.Items.Clear();
 
 			var tasks = Tasks.LoadCompatibleTasksFor(device);
@@ -127,25 +135,25 @@ namespace SecondLaw {
 		}
 
 		private void viewlogToolStripMenuItem_Click(object sender, EventArgs e) {
-			AdbDaemon.LaunchLogCat();
+			_currentDevice.LaunchLogCat();
 		}
 
 		private void systemInformationToolStripMenuItem_Click(object sender, EventArgs e) {
-			MessageBox.Show(AdbDaemon.GetSystemInformation(), "System Information");
+			MessageBox.Show(_currentDevice.GetSystemInformation(), "System Information");
 		}
 
 		private void normalToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = AdbDaemon.Reboot() ?? "Device is rebooting";
+			var output = _currentDevice.Reboot() ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Normal");
 		}
 
 		private void recoveryToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Recovery) ?? "Device is rebooting";
+			var output = _currentDevice.Reboot(AdbDaemon.RebootMode.Recovery) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Recovery");
 		}
 
 		private void bootloaderToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = AdbDaemon.Reboot(AdbDaemon.RebootMode.Bootloader) ?? "Device is rebooting";
+			var output = _currentDevice.Reboot(AdbDaemon.RebootMode.Bootloader) ?? "Device is rebooting";
 			MessageBox.Show(output, "Reboot - Bootloader");
 		}
 
@@ -158,21 +166,54 @@ namespace SecondLaw {
 
 		private void lsvScripts_MouseDoubleClick(object sender, MouseEventArgs e) {
 			var hitTest = lsvScripts.HitTest(e.Location);
-			if (hitTest.Item != null) {
+			if ((hitTest.Item != null) && (_currentDevice != null)) {
 				var task = (Task)hitTest.Item.Tag;
-				RunTask(task);
+				RunTask(task, _currentDevice);
 			}
 		}
 
-		private void RunTask(Task task) {
-			tslStatus.Text = string.Format("Running task \"{0}\"...", task.Name);
+		private void RunTask(Task task, DeviceInstance device) {
+			tslStatus.Text = string.Format("Running task \"{0}\" for the \"{1}\"...", task.Name, device.Metadata.ProductName);
 			lsvScripts.Enabled = false;
-			string result = task.Run();
-			if (!string.IsNullOrEmpty(result)) {
-				MessageBox.Show(this, result, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			try {
+				// Run the script
+				string result = task.Run(device);
+				if (!string.IsNullOrEmpty(result)) {
+					MessageBox.Show(this, result, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			} catch (ParseException px) {
+				// Script was unable to be parsed
+				string message = string.Format(
+					"Unable to parse PowerShell script:\r\n" +
+					"\r\n" +
+					"File: {0}\r\n" +
+					"\r\n" +
+					"Error: {1}{2}",
+					task.ScriptFile.FullName, px.Message, px.ErrorRecord.InvocationInfo.PositionMessage);
+				MessageBox.Show(this, message, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Debug.Print(px.ToString());
+
+			} catch (RuntimeException rx) {
+				// Script failed to run
+				string message = string.Format(
+					"Failed to run PowerShell script:\r\n" +
+					"\r\n" +
+					"File: {0}\r\n" +
+					"\r\n" +
+					"Error: {1}{2}",
+					task.ScriptFile.FullName, rx.Message, rx.ErrorRecord.InvocationInfo.PositionMessage);
+				MessageBox.Show(this, message, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Debug.Print(rx.ToString());
+				
+			} catch (Exception x) {
+				// Task failed
+				MessageBox.Show(this, x.ToString(), task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Debug.Print(x.ToString());
 			}
 			lsvScripts.Enabled = true;
-			tslStatus.Text = "Ready";
+
+			// Update the device information and available task list
+			DisplayCurrentDevice();
 		}
 	}
 }

@@ -5,12 +5,11 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using System.Xml;
 
 namespace SecondLaw {
-	class SupportedDevice {
+	public class SupportedDevice {
 		private readonly DirectoryInfo _deviceFolder;
 
 		public SupportedDevice(DirectoryInfo deviceFolder) {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -10,14 +11,13 @@ namespace SecondLaw {
 		private const string TASK_SCRIPT = "task.ps1";
 
 		private readonly FileInfo _icon;
-		private readonly FileInfo _script;
 
 		public Task(DirectoryInfo folder) {
 			Folder = folder;
 			_icon = Folder.GetFiles(TASK_ICON).FirstOrDefault();
 			
-			_script = Folder.GetFiles(TASK_SCRIPT).FirstOrDefault();
-			if (_script == null) {
+			ScriptFile = Folder.GetFiles(TASK_SCRIPT).FirstOrDefault();
+			if (ScriptFile == null) {
 				string path = Path.Combine(Folder.FullName, TASK_SCRIPT);
 				throw new FileNotFoundException("Unable to locate task script", path);
 			}
@@ -33,8 +33,10 @@ namespace SecondLaw {
 			get { return (_icon == null) ? null : Image.FromFile(_icon.FullName); }
 		}
 
-		public string Run() {
-			return PowerShell.Run(_script);
+		public FileInfo ScriptFile { get; private set; }
+
+		public string Run(DeviceInstance device) {
+			return PowerShell.Run(ScriptFile, new KeyValuePair<string, object>("Device", device));
 		}
 
 		public static Task Load(DirectoryInfo folder) {

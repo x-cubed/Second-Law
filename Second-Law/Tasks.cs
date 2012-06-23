@@ -51,7 +51,7 @@ namespace SecondLaw {
 			get { return false; }
 		}
 
-		public static Tasks LoadCompatibleTasksFor(SupportedDevice device) {
+		public static Tasks LoadCompatibleTasksFor(DeviceInstance device) {
 			var tasks = new Tasks();
 			var folder = new DirectoryInfo("..\\..\\Tasks");
 			if (folder.Exists) {

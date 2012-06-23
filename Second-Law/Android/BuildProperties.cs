@@ -2,7 +2,7 @@
 using System.Diagnostics;
 
 namespace SecondLaw.Android {
-	class BuildProperties : Dictionary<string, string> {
+	public class BuildProperties : Dictionary<string, string> {
 		public const string PATH = "/system/build.prop";
 
 		private const string BUILD_VERSION_SDK = "ro.build.version.sdk";

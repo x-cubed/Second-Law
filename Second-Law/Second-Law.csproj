@@ -74,6 +74,7 @@
     <Compile Include="AdbDaemon.cs" />
     <Compile Include="Android\BuildProperties.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="DeviceInstance.cs" />
     <Compile Include="Hardware.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
