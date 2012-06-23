@@ -25,11 +25,11 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
-			System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
-			System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
+			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
+			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
 			this.mnuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mniFileScanForDevices = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,9 +57,12 @@
 			this.statusBar = new System.Windows.Forms.StatusStrip();
 			this.tslStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.pnlScanning = new System.Windows.Forms.Panel();
-			this.lblSecondLaw = new System.Windows.Forms.Label();
+			this.lblInstructions = new System.Windows.Forms.Label();
 			this.prgScanning = new System.Windows.Forms.ProgressBar();
+			this.lblSecondLaw = new System.Windows.Forms.Label();
 			this.pnlDevice = new System.Windows.Forms.TableLayoutPanel();
+			this.grpDescription = new System.Windows.Forms.GroupBox();
+			this.lsvScripts = new System.Windows.Forms.ListView();
 			this.grpDeviceInformation = new System.Windows.Forms.GroupBox();
 			this.tblDeviceProperties = new System.Windows.Forms.TableLayoutPanel();
 			this.lblSystemVersion = new System.Windows.Forms.Label();
@@ -73,9 +76,6 @@
 			this.lbdVendor = new System.Windows.Forms.Label();
 			this.lblSerialNumber = new System.Windows.Forms.Label();
 			this.picDevice = new System.Windows.Forms.PictureBox();
-			this.lsvScripts = new System.Windows.Forms.ListView();
-			this.grpDescription = new System.Windows.Forms.GroupBox();
-			this.lblInstructions = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.mnuStrip.SuspendLayout();
 			this.statusBar.SuspendLayout();
@@ -248,7 +248,7 @@
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(119, 24);
 			this.aboutToolStripMenuItem.Text = "&About";
 			// 
 			// imlLargeIcons
@@ -277,7 +277,7 @@
 			// 
 			this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslStatus});
-			this.statusBar.Location = new System.Drawing.Point(0, 762);
+			this.statusBar.Location = new System.Drawing.Point(0, 589);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
 			this.statusBar.Size = new System.Drawing.Size(934, 25);
@@ -299,8 +299,31 @@
 			this.pnlScanning.Location = new System.Drawing.Point(0, 0);
 			this.pnlScanning.Name = "pnlScanning";
 			this.pnlScanning.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
-			this.pnlScanning.Size = new System.Drawing.Size(934, 787);
+			this.pnlScanning.Size = new System.Drawing.Size(934, 614);
 			this.pnlScanning.TabIndex = 7;
+			// 
+			// lblInstructions
+			// 
+			this.lblInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblInstructions.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblInstructions.Location = new System.Drawing.Point(3, 198);
+			this.lblInstructions.Name = "lblInstructions";
+			this.lblInstructions.Size = new System.Drawing.Size(928, 135);
+			this.lblInstructions.TabIndex = 2;
+			this.lblInstructions.Text = "Connect your device when ready\r\n\r\nMake sure that USB debugging is enabled.\r\nThis " +
+    "option is under Settings -> Applications -> Development.";
+			this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// prgScanning
+			// 
+			this.prgScanning.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.prgScanning.Location = new System.Drawing.Point(395, 153);
+			this.prgScanning.Name = "prgScanning";
+			this.prgScanning.Size = new System.Drawing.Size(149, 11);
+			this.prgScanning.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+			this.prgScanning.TabIndex = 1;
+			this.prgScanning.Visible = false;
 			// 
 			// lblSecondLaw
 			// 
@@ -312,16 +335,6 @@
 			this.lblSecondLaw.TabIndex = 0;
 			this.lblSecondLaw.Text = "Second Law";
 			this.lblSecondLaw.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// prgScanning
-			// 
-			this.prgScanning.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.prgScanning.Location = new System.Drawing.Point(395, 153);
-			this.prgScanning.Name = "prgScanning";
-			this.prgScanning.Size = new System.Drawing.Size(149, 11);
-			this.prgScanning.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-			this.prgScanning.TabIndex = 1;
-			this.prgScanning.Visible = false;
 			// 
 			// pnlDevice
 			// 
@@ -338,9 +351,37 @@
 			this.pnlDevice.RowCount = 2;
 			this.pnlDevice.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.pnlDevice.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 212F));
-			this.pnlDevice.Size = new System.Drawing.Size(934, 787);
+			this.pnlDevice.Size = new System.Drawing.Size(934, 614);
 			this.pnlDevice.TabIndex = 10;
 			this.pnlDevice.Visible = false;
+			// 
+			// grpDescription
+			// 
+			this.grpDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpDescription.Location = new System.Drawing.Point(265, 380);
+			this.grpDescription.Name = "grpDescription";
+			this.grpDescription.Size = new System.Drawing.Size(666, 206);
+			this.grpDescription.TabIndex = 12;
+			this.grpDescription.TabStop = false;
+			this.grpDescription.Text = "Description";
+			// 
+			// lsvScripts
+			// 
+			this.lsvScripts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lsvScripts.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5});
+			this.lsvScripts.LargeImageList = this.imlLargeIcons;
+			this.lsvScripts.Location = new System.Drawing.Point(265, 50);
+			this.lsvScripts.Margin = new System.Windows.Forms.Padding(3, 25, 3, 3);
+			this.lsvScripts.Name = "lsvScripts";
+			this.lsvScripts.Size = new System.Drawing.Size(666, 324);
+			this.lsvScripts.TabIndex = 11;
+			this.lsvScripts.UseCompatibleStateImageBehavior = false;
+			this.lsvScripts.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvScripts_MouseDoubleClick);
 			// 
 			// grpDeviceInformation
 			// 
@@ -350,7 +391,7 @@
 			this.grpDeviceInformation.Location = new System.Drawing.Point(3, 28);
 			this.grpDeviceInformation.Name = "grpDeviceInformation";
 			this.pnlDevice.SetRowSpan(this.grpDeviceInformation, 2);
-			this.grpDeviceInformation.Size = new System.Drawing.Size(256, 731);
+			this.grpDeviceInformation.Size = new System.Drawing.Size(256, 558);
 			this.grpDeviceInformation.TabIndex = 9;
 			this.grpDeviceInformation.TabStop = false;
 			// 
@@ -490,51 +531,11 @@
 			this.picDevice.TabIndex = 2;
 			this.picDevice.TabStop = false;
 			// 
-			// lsvScripts
-			// 
-			this.lsvScripts.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lsvScripts.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem6,
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10});
-			this.lsvScripts.LargeImageList = this.imlLargeIcons;
-			this.lsvScripts.Location = new System.Drawing.Point(265, 50);
-			this.lsvScripts.Margin = new System.Windows.Forms.Padding(3, 25, 3, 3);
-			this.lsvScripts.Name = "lsvScripts";
-			this.lsvScripts.Size = new System.Drawing.Size(666, 497);
-			this.lsvScripts.TabIndex = 11;
-			this.lsvScripts.UseCompatibleStateImageBehavior = false;
-			// 
-			// grpDescription
-			// 
-			this.grpDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpDescription.Location = new System.Drawing.Point(265, 553);
-			this.grpDescription.Name = "grpDescription";
-			this.grpDescription.Size = new System.Drawing.Size(666, 206);
-			this.grpDescription.TabIndex = 12;
-			this.grpDescription.TabStop = false;
-			this.grpDescription.Text = "Description";
-			// 
-			// lblInstructions
-			// 
-			this.lblInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblInstructions.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblInstructions.Location = new System.Drawing.Point(3, 198);
-			this.lblInstructions.Name = "lblInstructions";
-			this.lblInstructions.Size = new System.Drawing.Size(928, 135);
-			this.lblInstructions.TabIndex = 2;
-			this.lblInstructions.Text = "Connect your device when ready\r\n\r\nMake sure that USB debugging is enabled.\r\nThis " +
-    "option is under Settings -> Applications -> Development.";
-			this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(934, 787);
+			this.ClientSize = new System.Drawing.Size(934, 614);
 			this.Controls.Add(this.statusBar);
 			this.Controls.Add(this.mnuStrip);
 			this.Controls.Add(this.pnlScanning);

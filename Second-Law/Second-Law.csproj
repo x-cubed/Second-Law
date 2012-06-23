@@ -58,6 +58,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,10 +81,13 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PowerShell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportedDevice.cs" />
     <Compile Include="SupportedDevices.cs" />
+    <Compile Include="Task.cs" />
+    <Compile Include="Tasks.cs" />
     <Compile Include="UsbDevice.cs" />
     <Compile Include="UsbDeviceList.cs">
       <SubType>Form</SubType>
@@ -128,10 +134,13 @@
     </Content>
     <Content Include="Devices\Vodafone 858\device.jpg" />
     <Content Include="Devices\Vodafone 858\device.xml" />
+    <Content Include="Tasks\Install APK\icon.png" />
+    <None Include="Tasks\Install APK\task.ps1" />
     <None Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
+    <Folder Include="Tasks\Temporary Root\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
