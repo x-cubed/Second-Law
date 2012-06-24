@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using SecondLaw.Windows;
 
 namespace SecondLaw {
 	public partial class UsbDeviceList : Form {

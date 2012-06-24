@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace SecondLaw {
+namespace SecondLaw.Windows {
 	public class Hardware {
 		private const int WM_DEVICECHANGE = 0x219;
 		private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);

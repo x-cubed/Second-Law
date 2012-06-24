@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using SecondLaw.Android;
+using SecondLaw.Windows;
 
 namespace SecondLaw {
 	public class DeviceInstance {

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace SecondLaw {
+namespace SecondLaw.Windows {
 	public class UsbDevice : Device {
 		private static readonly Regex PRODUCT_ID = new Regex("PID_?([0-9A-F]{4})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex REVISION = new Regex("REV_?([0-9A-F]{4})", RegexOptions.Compiled | RegexOptions.IgnoreCase);

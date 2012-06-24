@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SecondLaw {
+namespace SecondLaw.Windows {
 	public class Device {
 		public enum RegistryDataType : uint {
 			REG_SZ = 1,

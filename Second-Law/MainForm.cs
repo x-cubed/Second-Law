@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Management.Automation;
 using System.Windows.Forms;
+using SecondLaw.Windows;
 
 namespace SecondLaw {
 	public partial class MainForm : Form {
