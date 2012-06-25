@@ -1,14 +1,18 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Management.Automation;
+using System.Threading;
 using System.Windows.Forms;
 using SecondLaw.Windows;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SecondLaw {
 	public partial class MainForm : Form {
 		private const string DEFAULT_TASK_ICON = "cmd.ico";
 
+		private readonly BackgroundWorker _scanner = new BackgroundWorker();
 		private readonly Hardware _hardware = new Hardware();
 		private readonly SupportedDevices _supportedDevices = new SupportedDevices();
 		private readonly Timer _scanForDevices = new Timer();
@@ -18,6 +22,9 @@ namespace SecondLaw {
 		public MainForm() {
 			InitializeComponent();
 			lsvScripts.Items.Clear();
+
+			_scanner.DoWork += Scanner_DoWork;
+			_scanner.RunWorkerCompleted += Scanner_RunWorkerCompleted;
 
 			_hardware.DeviceInterfaceChanged += Hardware_DeviceInterfaceChanged;
 			_hardware.RegisterNotifications(this);
@@ -53,30 +60,44 @@ namespace SecondLaw {
 			pnlDevice.Visible = false;
 			prgScanning.Visible = true;
 
-			DeviceInstance currentDevice = null;
-			var devices = _hardware.EnumerateUsbDevices();
-			foreach (var usbDevice in devices) {
-				// Load the device icons
-				string imageKey = usbDevice.PhysicalDeviceObjectName;
-				LoadImage(imageKey, usbDevice.LargeIcon, imlLargeIcons);
-				LoadImage(imageKey, usbDevice.SmallIcon, imlSmallIcons);
-
-				SupportedDevice supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId,
-																																			usbDevice.Revision, usbDevice.InterfaceId);
-				if (supportedDevice != null) {
-					currentDevice = new DeviceInstance(supportedDevice, usbDevice);
-					break;
-				}
+			while (_scanner.IsBusy) {
+				Thread.Sleep(100);
 			}
-			_currentDevice = currentDevice;
+			_scanner.RunWorkerAsync();
+		}
+
+
+		private void Scanner_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			_currentDevice = (DeviceInstance)e.Result;
 
 			prgScanning.Visible = false;
 			DisplayCurrentDevice();
 		}
 
+		private void Scanner_DoWork(object sender, DoWorkEventArgs e) {
+			DeviceInstance currentDevice = null;
+			var devices = _hardware.EnumerateUsbDevices();
+			foreach (var usbDevice in devices) {			
+				SupportedDevice supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId,
+																																			usbDevice.Revision, usbDevice.InterfaceId);
+				if (supportedDevice != null) {
+					currentDevice = new DeviceInstance(supportedDevice, usbDevice);
+					currentDevice.LoadDeviceInformation();
+					break;
+				}
+			}
+			e.Result = currentDevice;
+		}
+
 		private void DisplayCurrentDevice() {
 			if (_currentDevice != null) {
 				tslStatus.Text = "Found a " + _currentDevice.Metadata.ProductName;
+
+				// Load the device icons
+				string imageKey = _currentDevice.UsbDevice.PhysicalDeviceObjectName;
+				LoadImage(imageKey, _currentDevice.UsbDevice.LargeIcon, imlLargeIcons);
+				LoadImage(imageKey, _currentDevice.UsbDevice.SmallIcon, imlSmallIcons);
+
 				mnuDevice.Enabled = true;
 				DisplayDeviceInformation(_currentDevice);
 				DisplayTasksForDevice(_currentDevice);
@@ -89,11 +110,7 @@ namespace SecondLaw {
 		}
 
 		private void DisplayDeviceInformation(DeviceInstance device) {
-			var props = DeviceInstance.GetBuildProperties();
-			if (props == null) {
-				return;
-			}
-
+			var props = device.BuildProperties;
 			SetLink(lnkDeviceName, device.Metadata.DeviceName ?? props.ProductModel, device.Metadata.ProductPage);
 			lblSerialNumber.Text = device.GetSerialNumber() ?? "(Unknown)";
 			lblSystemVersion.Text = props.SystemVersion ?? "(Unknown)";
@@ -210,7 +227,7 @@ namespace SecondLaw {
 					task.ScriptFile.FullName, rx.Message, rx.ErrorRecord.InvocationInfo.PositionMessage);
 				MessageBox.Show(this, message, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Debug.Print(rx.ToString());
-				
+
 			} catch (Exception x) {
 				// Task failed
 				MessageBox.Show(this, x.ToString(), task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);

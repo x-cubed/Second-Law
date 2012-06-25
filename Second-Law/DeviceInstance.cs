@@ -10,8 +10,14 @@ namespace SecondLaw {
 			UsbDevice = usbDevice;
 		}
 
+		public void LoadDeviceInformation() {
+			BuildProperties = GetBuildProperties();
+		}
+
 		public SupportedDevice Metadata { get; private set; }
 		public UsbDevice UsbDevice { get; private set; }
+
+		public BuildProperties BuildProperties { get; private set; }
 
 		private static string RunADBCommand(string command, out string errorMessages) {
 			// TODO: Ensure command is targeting the right device, with -s <serialNumber>
@@ -28,10 +34,11 @@ namespace SecondLaw {
 			if (fileNames.Length == 0) {
 				throw new ArgumentOutOfRangeException("fileNames");
 			}
+			AdbDaemon.WaitForDevice();
 			return AdbDaemon.RunADBCommand("shell cat " + String.Join(" ", fileNames), out errorMessages);
 		}
 
-		public static BuildProperties GetBuildProperties() {
+		private static BuildProperties GetBuildProperties() {
 			var text = GetTextFile(BuildProperties.PATH);
 			return (text == null) ? null : new BuildProperties(text);
 		}
@@ -56,6 +63,7 @@ namespace SecondLaw {
 					command = "reboot";
 					break;
 			}
+			AdbDaemon.WaitForDevice();
 			string errorMessages;
 			AdbDaemon.RunADBCommand(command, out errorMessages);
 			return errorMessages;
@@ -66,12 +74,14 @@ namespace SecondLaw {
 		}
 
 		public string GetSerialNumber() {
+			AdbDaemon.WaitForDevice();
 			string errorMessages;
 			string serial = AdbDaemon.RunADBCommand("get-serialno", out errorMessages);
 			return (String.IsNullOrEmpty(errorMessages)) ? serial : null;
 		}
 
 		public string InstallPackage(string filePath, out string errorMessages) {
+			AdbDaemon.WaitForDevice();
 			return RunADBCommand("install \"" + filePath + "\"", out errorMessages);
 		}
 
