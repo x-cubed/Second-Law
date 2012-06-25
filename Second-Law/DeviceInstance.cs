@@ -19,26 +19,41 @@ namespace SecondLaw {
 
 		public BuildProperties BuildProperties { get; private set; }
 
-		private static string RunADBCommand(string command, out string errorMessages) {
-			// TODO: Ensure command is targeting the right device, with -s <serialNumber>
-			return AdbDaemon.RunADBCommand(command, out errorMessages);
+		public void WaitForDevice() {
+			AdbDaemon.WaitForDevice();
 		}
 
-		private static string GetTextFile(string fileName) {
+		private string RunADBCommand(string command, out string errorMessages) {
+			// TODO: Ensure command is targeting the right device, with -s <serialNumber>
+			string result = AdbDaemon.RunADBCommand(command, out errorMessages);
+			Debug.Print("DeviceInstance.RunADBCommand(\"{0}\"):\r\n" + result + "\r\n" + errorMessages);
+			return result;
+		}
+
+		public string RunADBCommandOrThrow(string command) {
+			string errorMessages;
+			string result = RunADBCommand(command, out errorMessages);
+			if (!string.IsNullOrEmpty(errorMessages)) {
+				throw new Exception(command + " failed: " + errorMessages);
+			}
+			return result;
+		}
+
+		private string GetTextFile(string fileName) {
 			string errorMessages;
 			string file = GetTextFiles(new[] { fileName }, out errorMessages);
 			return String.IsNullOrEmpty(errorMessages) ? file : null;
 		}
 
-		private static string GetTextFiles(string[] fileNames, out string errorMessages) {
+		private string GetTextFiles(string[] fileNames, out string errorMessages) {
 			if (fileNames.Length == 0) {
 				throw new ArgumentOutOfRangeException("fileNames");
 			}
-			AdbDaemon.WaitForDevice();
-			return AdbDaemon.RunADBCommand("shell cat " + String.Join(" ", fileNames), out errorMessages);
+			WaitForDevice();
+			return RunADBCommand("shell cat " + String.Join(" ", fileNames), out errorMessages);
 		}
 
-		private static BuildProperties GetBuildProperties() {
+		private BuildProperties GetBuildProperties() {
 			var text = GetTextFile(BuildProperties.PATH);
 			return (text == null) ? null : new BuildProperties(text);
 		}
@@ -63,9 +78,9 @@ namespace SecondLaw {
 					command = "reboot";
 					break;
 			}
-			AdbDaemon.WaitForDevice();
+			WaitForDevice();
 			string errorMessages;
-			AdbDaemon.RunADBCommand(command, out errorMessages);
+			RunADBCommand(command, out errorMessages);
 			return errorMessages;
 		}
 
@@ -74,14 +89,26 @@ namespace SecondLaw {
 		}
 
 		public string GetSerialNumber() {
-			AdbDaemon.WaitForDevice();
+			WaitForDevice();
 			string errorMessages;
-			string serial = AdbDaemon.RunADBCommand("get-serialno", out errorMessages);
+			string serial = RunADBCommand("get-serialno", out errorMessages);
 			return (String.IsNullOrEmpty(errorMessages)) ? serial : null;
 		}
 
+		public void ChangeMode(int mode, string path) {
+			WaitForDevice();
+			RunADBCommandOrThrow("shell chmod " + mode + " \"" + path + "\"");			
+		}
+
+		public string PushFile(string sourcePath, string destinationPath) {
+			WaitForDevice();
+			string result;
+			RunADBCommand("push \"" + sourcePath + "\" \"" + destinationPath + "\"", out result);
+			return result;
+		}
+
 		public string InstallPackage(string filePath, out string errorMessages) {
-			AdbDaemon.WaitForDevice();
+			WaitForDevice();
 			return RunADBCommand("install \"" + filePath + "\"", out errorMessages);
 		}
 
