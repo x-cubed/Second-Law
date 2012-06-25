@@ -53,6 +53,7 @@ namespace SecondLaw {
 			pnlDevice.Visible = false;
 			prgScanning.Visible = true;
 
+			DeviceInstance currentDevice = null;
 			var devices = _hardware.EnumerateUsbDevices();
 			foreach (var usbDevice in devices) {
 				// Load the device icons
@@ -63,10 +64,11 @@ namespace SecondLaw {
 				SupportedDevice supportedDevice = _supportedDevices.GetDevice(usbDevice.VendorId, usbDevice.ProductId,
 																																			usbDevice.Revision, usbDevice.InterfaceId);
 				if (supportedDevice != null) {
-					_currentDevice = new DeviceInstance(supportedDevice, usbDevice);
+					currentDevice = new DeviceInstance(supportedDevice, usbDevice);
 					break;
 				}
 			}
+			_currentDevice = currentDevice;
 
 			prgScanning.Visible = false;
 			DisplayCurrentDevice();
