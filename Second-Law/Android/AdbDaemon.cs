@@ -15,14 +15,17 @@ namespace SecondLaw {
 		}
 
 		public static string RunADBCommand(string adbArguments, out string errorMessages) {
-			var process = new Process();
-			process.StartInfo.FileName = PathToADB;
-			process.StartInfo.Arguments = adbArguments;
-			process.StartInfo.RedirectStandardError = true;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.CreateNoWindow = true;
-			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+			var process = new Process{
+				StartInfo = {
+					FileName = PathToADB,
+					Arguments = adbArguments,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+					CreateNoWindow = true,
+					WindowStyle = ProcessWindowStyle.Hidden
+				}
+			};
 			process.Start();
 
 			string result;
