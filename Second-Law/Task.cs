@@ -36,6 +36,7 @@ namespace SecondLaw {
 		public FileInfo ScriptFile { get; private set; }
 
 		public string Run(DeviceInstance device) {
+			Environment.CurrentDirectory = Folder.FullName;
 			return PowerShell.Run(ScriptFile, new KeyValuePair<string, object>("Device", device));
 		}
 
