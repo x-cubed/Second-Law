@@ -137,6 +137,8 @@
     <Content Include="Devices\Vodafone 858\device.xml" />
     <Content Include="Tasks\Install APK\icon.png" />
     <None Include="Tasks\Install APK\task.ps1" />
+    <None Include="Tasks\Root with zergrush\task.ps1" />
+    <None Include="Tasks\Root with zergrush\zergRush" />
     <None Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
