@@ -14,6 +14,20 @@ namespace SecondLaw {
 			get { return Path.Combine(Settings.Default.PathToADK, "platform-tools", "adb.exe"); }
 		}
 
+		public static void WaitForDevice() {
+			var process = new Process {
+				StartInfo = {
+					FileName = PathToADB,
+					Arguments = "wait-for-device",
+					UseShellExecute = false,
+					CreateNoWindow = true,
+					WindowStyle = ProcessWindowStyle.Hidden
+				}
+			};
+			process.Start();
+			process.WaitForExit();
+		}
+
 		public static string RunADBCommand(string adbArguments, out string errorMessages) {
 			var process = new Process{
 				StartInfo = {
