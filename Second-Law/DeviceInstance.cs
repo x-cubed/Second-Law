@@ -26,7 +26,7 @@ namespace SecondLaw {
 		private string RunADBCommand(string command, out string errorMessages) {
 			// TODO: Ensure command is targeting the right device, with -s <serialNumber>
 			string result = AdbDaemon.RunADBCommand(command, out errorMessages);
-			Debug.Print("DeviceInstance.RunADBCommand(\"{0}\"):\r\n" + result + "\r\n" + errorMessages);
+			Debug.Print("DeviceInstance.RunADBCommand(\"{0}\"):\r\n{1}\r\n{2}", command, result, errorMessages);
 			return result;
 		}
 
