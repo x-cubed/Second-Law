@@ -169,18 +169,25 @@ namespace SecondLaw {
 		}
 
 		private void normalToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = _currentDevice.Reboot() ?? "Device is rebooting";
-			MessageBox.Show(output, "Reboot - Normal");
+			TryReboot(AdbDaemon.RebootMode.Normal);
 		}
 
 		private void recoveryToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = _currentDevice.Reboot(AdbDaemon.RebootMode.Recovery) ?? "Device is rebooting";
-			MessageBox.Show(output, "Reboot - Recovery");
+			TryReboot(AdbDaemon.RebootMode.Recovery);
 		}
 
 		private void bootloaderToolStripMenuItem_Click(object sender, EventArgs e) {
-			var output = _currentDevice.Reboot(AdbDaemon.RebootMode.Bootloader) ?? "Device is rebooting";
-			MessageBox.Show(output, "Reboot - Bootloader");
+			TryReboot(AdbDaemon.RebootMode.Bootloader);
+		}
+
+		private void TryReboot(AdbDaemon.RebootMode mode = AdbDaemon.RebootMode.Normal) {
+			string output = "Device is rebooting";
+			try {
+				_currentDevice.Reboot(mode);
+			} catch (Exception x) {
+				output = x.Message;
+			}
+			MessageBox.Show(output, "Reboot - " + mode.ToString());
 		}
 
 		private void Link_Clicked(object sender, LinkLabelLinkClickedEventArgs e) {
