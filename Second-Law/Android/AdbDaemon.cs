@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using SecondLaw.Properties;
 
@@ -28,7 +30,7 @@ namespace SecondLaw {
 			process.WaitForExit();
 		}
 
-		public static string RunADBCommand(string adbArguments, out string errorMessages) {
+		public static IEnumerable<string> RunADBCommand(string adbArguments, bool throwOnError = false) {
 			var process = new Process{
 				StartInfo = {
 					FileName = PathToADB,
@@ -42,16 +44,31 @@ namespace SecondLaw {
 			};
 			process.Start();
 
-			string result;
 			using (var output = process.StandardOutput) {
 				using (var error = process.StandardError) {
-					result = output.ReadToEnd();
-					errorMessages = error.ReadToEnd();
+					while (!output.EndOfStream) {
+						string line = output.ReadLine();
+						if (!string.IsNullOrEmpty(line)) {
+							yield return line;
+						}
+					}
+
+					if (throwOnError) {
+						string errors = error.ReadToEnd();
+						if (!string.IsNullOrEmpty(errors)) {
+							throw new Exception(errors);
+						}
+						yield break;
+					}
+
+					while (!error.EndOfStream) {
+						string line = error.ReadLine();
+						if (!string.IsNullOrEmpty(line)) {
+							yield return line;
+						}
+					}
 				}
 			}
-			result = result.Replace("\r\r", "\r");
-			result = result.Trim();
-			return (result == "") ? null : result;
 		}
 	}
 }

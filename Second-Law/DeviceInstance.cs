@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SecondLaw.Android;
 using SecondLaw.Windows;
@@ -23,41 +24,35 @@ namespace SecondLaw {
 			AdbDaemon.WaitForDevice();
 		}
 
-		private string RunADBCommand(string command, out string errorMessages) {
+		private IEnumerable<string> RunADBCommand(string command, bool throwOnError) {
 			// TODO: Ensure command is targeting the right device, with -s <serialNumber>
-			string result = AdbDaemon.RunADBCommand(command, out errorMessages);
-			Debug.Print("DeviceInstance.RunADBCommand(\"{0}\"):\r\n{1}\r\n{2}", command, result, errorMessages);
+			Debug.Print("DeviceInstance.RunADBCommand(\"{0}\")", command);
+			return AdbDaemon.RunADBCommand(command, throwOnError);
+		}
+
+		private string RunADBCommandReturnString(string command, bool throwOnError) {
+			string result = string.Join("\r\n", RunADBCommand(command, throwOnError));
+			Debug.Print(result);
 			return result;
 		}
 
-		private string RunADBCommandOrThrow(string command) {
-			string errorMessages;
-			string result = RunADBCommand(command, out errorMessages);
-			if (!string.IsNullOrEmpty(errorMessages)) {
-				throw new Exception(command + " failed: " + errorMessages);
-			}
-			return result;
-		}
-
-		public string RunShellCommand(string command) {
+		public IEnumerable<string> RunShellCommand(string command) {
 			if (command.Contains("\"")) {
 				throw new ArgumentOutOfRangeException(command, "Can't contain quotes");
 			}
-			return RunADBCommandOrThrow("shell \"" + command + "\"");
+			return RunADBCommand("shell \"" + command + "\"", true);
 		}
 
 		private string GetTextFile(string fileName) {
-			string errorMessages;
-			string file = GetTextFiles(new[] { fileName }, out errorMessages);
-			return String.IsNullOrEmpty(errorMessages) ? file : null;
+			return GetTextFiles(new[] { fileName });
 		}
 
-		private string GetTextFiles(string[] fileNames, out string errorMessages) {
+		private string GetTextFiles(string[] fileNames) {
 			if (fileNames.Length == 0) {
 				throw new ArgumentOutOfRangeException("fileNames");
 			}
 			WaitForDevice();
-			return RunADBCommand("shell cat " + String.Join(" ", fileNames), out errorMessages);
+			return RunADBCommandReturnString("shell cat " + String.Join(" ", fileNames), true);
 		}
 
 		private BuildProperties GetBuildProperties() {
@@ -66,13 +61,10 @@ namespace SecondLaw {
 		}
 
 		public string GetSystemInformation() {
-			string errorMessages;
-			string output = GetTextFiles(new[] { "/proc/cpuinfo", "/proc/meminfo" }, out errorMessages);
-			output += Environment.NewLine + errorMessages;
-			return output;
+			return GetTextFiles(new[] { "/proc/cpuinfo", "/proc/meminfo" });
 		}
 
-		public string Reboot(AdbDaemon.RebootMode mode = AdbDaemon.RebootMode.Normal) {
+		public void Reboot(AdbDaemon.RebootMode mode = AdbDaemon.RebootMode.Normal) {
 			string command;
 			switch (mode) {
 				case AdbDaemon.RebootMode.Recovery:
@@ -86,9 +78,7 @@ namespace SecondLaw {
 					break;
 			}
 			WaitForDevice();
-			string errorMessages;
-			RunADBCommand(command, out errorMessages);
-			return errorMessages;
+			RunADBCommand(command, true);
 		}
 
 		public void LaunchLogCat() {
@@ -97,38 +87,37 @@ namespace SecondLaw {
 
 		public string GetSerialNumber() {
 			WaitForDevice();
-			string errorMessages;
-			string serial = RunADBCommand("get-serialno", out errorMessages);
-			return (String.IsNullOrEmpty(errorMessages)) ? serial : null;
+			return RunADBCommandReturnString("get-serialno", true);
 		}
 
 		public void ChangeMode(int mode, string path) {
+			if (path.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("path", "Can't contain quotes");
+			}
+
 			WaitForDevice();
-			RunADBCommandOrThrow("shell chmod " + mode + " \"" + path + "\"");			
+			RunADBCommandReturnString("shell chmod " + mode + " \"" + path + "\"", true);
 		}
 
 		public string PushFile(string sourcePath, string destinationPath) {
-			WaitForDevice();
-			string result;
-			RunADBCommand("push \"" + sourcePath + "\" \"" + destinationPath + "\"", out result);
-			return result;
-		}
+			if (sourcePath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("sourcePath", "Can't contain quotes");
+			}
+			if (destinationPath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("destinationPath", "Can't contain quotes");
+			}
 
-		public string InstallPackage(string filePath, out string errorMessages) {
 			WaitForDevice();
-			return RunADBCommand("install \"" + filePath + "\"", out errorMessages);
+			return RunADBCommandReturnString("push \"" + sourcePath + "\" \"" + destinationPath + "\"", false);
 		}
 
 		public string InstallPackage(string filePath) {
-			string errorMessages;
-			string result = InstallPackage(filePath, out errorMessages);
-			if (String.IsNullOrEmpty(result)) {
-				return errorMessages;
-			} else if (String.IsNullOrEmpty(errorMessages)) {
-				return result;
-			} else {
-				return result + "\r\n" + errorMessages;
+			if (filePath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("filePath", "Can't contain quotes");
 			}
+
+			WaitForDevice();
+			return RunADBCommandReturnString("install \"" + filePath + "\"", true);
 		}
 	}
 }
