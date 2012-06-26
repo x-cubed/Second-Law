@@ -58,18 +58,17 @@ namespace SecondLaw {
 		}
 
 		private void ScanForUsbDevices() {
+			if (_scanner.IsBusy) {
+				return;
+			}
+
 			tslStatus.Text = "Scanning...";
 			mnuDevice.Enabled = false;
 			pnlScanning.Visible = true;
 			pnlDevice.Visible = false;
 			prgScanning.Visible = true;
-
-			while (_scanner.IsBusy) {
-				Thread.Sleep(100);
-			}
 			_scanner.RunWorkerAsync();
 		}
-
 
 		private void Scanner_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
 			_currentDevice = (DeviceInstance)e.Result;
