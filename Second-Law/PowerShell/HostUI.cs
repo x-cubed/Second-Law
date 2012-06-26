@@ -27,6 +27,7 @@ namespace SecondLaw.PowerShell {
 		public void StartScript(IWin32Window owner, string scriptName) {
 			prgProgress.Visible = false;
 			butCancel.Visible = true;
+			lsvLog.Items.Clear();
 
 			_scriptName = scriptName;
 			Text = _scriptName;
@@ -66,6 +67,7 @@ namespace SecondLaw.PowerShell {
 					return;
 				}
 				_hostUI.lsvLog.Items.Add(item);
+				_hostUI.lsvLog.EnsureVisible(_hostUI.lsvLog.Items.Count - 1);
 			}
 
 			public override void Write(string value) {
