@@ -34,6 +34,7 @@
 			this.lsvLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colMessage});
 			this.lsvLog.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lsvLog.FullRowSelect = true;
 			this.lsvLog.Location = new System.Drawing.Point(12, 12);
 			this.lsvLog.Name = "lsvLog";
 			this.lsvLog.Size = new System.Drawing.Size(771, 330);
