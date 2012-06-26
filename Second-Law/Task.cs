@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using SecondLaw.PowerShell;
 
 namespace SecondLaw {
 	class Task {
@@ -34,14 +35,6 @@ namespace SecondLaw {
 		}
 
 		public FileInfo ScriptFile { get; private set; }
-
-		public string Run(DeviceInstance device) {
-			string oldDirectory = Environment.CurrentDirectory;
-			Environment.CurrentDirectory = Folder.FullName;
-			string result = PowerShell.Run(ScriptFile, new KeyValuePair<string, object>("Device", device));
-			Environment.CurrentDirectory = oldDirectory;
-			return result;
-		}
 
 		public static Task Load(DirectoryInfo folder) {
 			try {

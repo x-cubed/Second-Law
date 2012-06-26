@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Windows.Forms;
+using SecondLaw.PowerShell;
 using SecondLaw.Windows;
 using Timer = System.Windows.Forms.Timer;
 
@@ -16,6 +18,7 @@ namespace SecondLaw {
 		private readonly Hardware _hardware = new Hardware();
 		private readonly SupportedDevices _supportedDevices = new SupportedDevices();
 		private readonly Timer _scanForDevices = new Timer();
+		private readonly Host _psHost;
 
 		private DeviceInstance _currentDevice;
 
@@ -23,6 +26,7 @@ namespace SecondLaw {
 			InitializeComponent();
 			lsvScripts.Items.Clear();
 
+			_psHost = new Host(this);
 			_scanner.DoWork += Scanner_DoWork;
 			_scanner.RunWorkerCompleted += Scanner_RunWorkerCompleted;
 
@@ -198,45 +202,27 @@ namespace SecondLaw {
 		private void RunTask(Task task, DeviceInstance device) {
 			tslStatus.Text = string.Format("Running task \"{0}\" for the \"{1}\"...", task.Name, device.Metadata.ProductName);
 			lsvScripts.Enabled = false;
-			try {
-				// Run the script
-				string result = task.Run(device);
-				if (!string.IsNullOrEmpty(result)) {
-					MessageBox.Show(this, result, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+			string oldDirectory = Environment.CurrentDirectory;
+			Action<PipelineStateInfo> completed = null;
+			completed = state => {
+				if (InvokeRequired) {
+					Invoke(new Action(() => completed(state)));
+					return;
 				}
-			} catch (ParseException px) {
-				// Script was unable to be parsed
-				string message = string.Format(
-					"Unable to parse PowerShell script:\r\n" +
-					"\r\n" +
-					"File: {0}\r\n" +
-					"\r\n" +
-					"Error: {1}{2}",
-					task.ScriptFile.FullName, px.Message, px.ErrorRecord.InvocationInfo.PositionMessage);
-				MessageBox.Show(this, message, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Debug.Print(px.ToString());
 
-			} catch (RuntimeException rx) {
-				// Script failed to run
-				string message = string.Format(
-					"Failed to run PowerShell script:\r\n" +
-					"\r\n" +
-					"File: {0}\r\n" +
-					"\r\n" +
-					"Error: {1}{2}",
-					task.ScriptFile.FullName, rx.Message, rx.ErrorRecord.InvocationInfo.PositionMessage);
-				MessageBox.Show(this, message, task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Debug.Print(rx.ToString());
+				Environment.CurrentDirectory = oldDirectory;
+			  lsvScripts.Enabled = true;
 
-			} catch (Exception x) {
-				// Task failed
-				MessageBox.Show(this, x.ToString(), task.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Debug.Print(x.ToString());
-			}
-			lsvScripts.Enabled = true;
+			  // Update the device information and available task list
+			  DisplayCurrentDevice();
+			};
 
-			// Update the device information and available task list
-			DisplayCurrentDevice();
+			// Run the script
+			Environment.CurrentDirectory = task.Folder.FullName;
+			_psHost.RunAsync(task.Name, task.ScriptFile, completed,
+				new KeyValuePair<string, object>("Device", device)
+			);
 		}
 	}
 }

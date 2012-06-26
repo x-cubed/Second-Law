@@ -73,6 +73,14 @@
   <ItemGroup>
     <Compile Include="Android\AdbDaemon.cs" />
     <Compile Include="Android\BuildProperties.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="PowerShell\Host.cs" />
+    <Compile Include="PowerShell\HostUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PowerShell\HostUI.Designer.cs">
+      <DependentUpon>HostUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Device.cs" />
     <Compile Include="DeviceInstance.cs" />
     <Compile Include="Windows\Hardware.cs" />
@@ -82,7 +90,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PowerShell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportedDevice.cs" />
@@ -98,6 +105,9 @@
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\HostUI.resx">
+      <DependentUpon>HostUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
