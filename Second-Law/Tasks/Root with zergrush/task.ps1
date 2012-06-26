@@ -30,5 +30,6 @@ Write-Progress -Activity "Getting root access..." -PercentComplete 90 -Status "W
 $Device.WaitForDevice()
 
 # Clean up temp folder
+$Device.RunShellCommand("rm " + $TempFolder + "*")
 $Device.RunShellCommand("rmdir " + $TempFolder)
 Write-Progress -Activity "Getting root access..." -Status "Done" -Completed
