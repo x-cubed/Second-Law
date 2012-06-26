@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HostUI));
 			this.lsvLog = new System.Windows.Forms.ListView();
 			this.colMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.prgProgress = new System.Windows.Forms.ProgressBar();
@@ -31,6 +32,9 @@
 			// 
 			// lsvLog
 			// 
+			this.lsvLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lsvLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colMessage});
 			this.lsvLog.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -49,6 +53,8 @@
 			// 
 			// prgProgress
 			// 
+			this.prgProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.prgProgress.Location = new System.Drawing.Point(12, 352);
 			this.prgProgress.Name = "prgProgress";
 			this.prgProgress.Size = new System.Drawing.Size(690, 26);
@@ -57,6 +63,8 @@
 			// 
 			// butCancel
 			// 
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Enabled = false;
 			this.butCancel.Location = new System.Drawing.Point(708, 352);
@@ -70,11 +78,12 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(795, 390);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.prgProgress);
 			this.Controls.Add(this.lsvLog);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "HostUI";
