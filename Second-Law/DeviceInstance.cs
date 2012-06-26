@@ -30,13 +30,20 @@ namespace SecondLaw {
 			return result;
 		}
 
-		public string RunADBCommandOrThrow(string command) {
+		private string RunADBCommandOrThrow(string command) {
 			string errorMessages;
 			string result = RunADBCommand(command, out errorMessages);
 			if (!string.IsNullOrEmpty(errorMessages)) {
 				throw new Exception(command + " failed: " + errorMessages);
 			}
 			return result;
+		}
+
+		public string RunShellCommand(string command) {
+			if (command.Contains("\"")) {
+				throw new ArgumentOutOfRangeException(command, "Can't contain quotes");
+			}
+			return RunADBCommandOrThrow("shell \"" + command + "\"");
 		}
 
 		private string GetTextFile(string fileName) {
