@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Android\AdbDaemon.cs" />
+    <Compile Include="Android\AdbUsb.cs" />
     <Compile Include="Android\BuildProperties.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PowerShell\Host.cs" />
