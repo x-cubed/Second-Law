@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Windows.Forms;
+using SecondLaw.Android;
 using SecondLaw.PowerShell;
 using SecondLaw.Windows;
 using Timer = System.Windows.Forms.Timer;
@@ -26,10 +28,20 @@ namespace SecondLaw {
 			InitializeComponent();
 			lsvScripts.Items.Clear();
 
+			// Update adb_usb.ini then kill off any existing ADB instance
+			var vendorIds = _supportedDevices.Select(d => d.VendorId).Distinct().ToArray();
+			Debug.Print("MainForm.ctor(): Writing adb_usb.ini file for {0} vendors", vendorIds.Length);
+			AdbUsb.WriteVendorIds(vendorIds);
+			AdbDaemon.KillServer();
+
+			// Create the host UI for PowerShell scripts
 			_psHost = new Host(this);
+			
+			// Create the scanner for finding devices and reading device properties
 			_scanner.DoWork += Scanner_DoWork;
 			_scanner.RunWorkerCompleted += Scanner_RunWorkerCompleted;
 
+			// Listen for hardware change notifications
 			_hardware.DeviceInterfaceChanged += Hardware_DeviceInterfaceChanged;
 			_hardware.RegisterNotifications(this);
 
