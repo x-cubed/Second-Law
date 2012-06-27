@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using SecondLaw.Android;
 using SecondLaw.Windows;
 
 namespace SecondLaw {
 	public class DeviceInstance {
+		private const string PLATFORM_DEVICES = "/sys/devices/platform/";
+		private const string BATTERY_CAPACITY = "/power_supply/battery/capacity";
+		private const string BATTERY_STATUS = "/power_supply/battery/status";
+
+		private string _batteryDevicePath;
+
 		internal DeviceInstance(SupportedDevice metadata, UsbDevice usbDevice) {
 			Metadata = metadata;
 			UsbDevice = usbDevice;
@@ -13,6 +20,13 @@ namespace SecondLaw {
 
 		public void LoadDeviceInformation() {
 			BuildProperties = GetBuildProperties();
+
+			// Find the battery device
+			IEnumerable<string> devices = RunShellCommand("ls -1 " + PLATFORM_DEVICES);
+			string battery = devices.FirstOrDefault(d => d.EndsWith("_battery"));
+			if (battery != null) {
+				_batteryDevicePath = PLATFORM_DEVICES + battery;
+			}
 		}
 
 		public SupportedDevice Metadata { get; private set; }
@@ -22,6 +36,18 @@ namespace SecondLaw {
 
 		public void WaitForDevice() {
 			AdbDaemon.WaitForDevice();
+		}
+
+		public byte? BatteryChargePercentage {
+			get {
+				if (_batteryDevicePath == null) {
+					return null;
+				}
+
+				string capacity = RunShellCommand("cat " + _batteryDevicePath + BATTERY_CAPACITY).FirstOrDefault();
+				byte percentage;
+				return (byte.TryParse(capacity, out percentage)) ? percentage : (byte?)null;
+			}
 		}
 
 		private IEnumerable<string> RunADBCommand(string command, bool throwOnError) {
