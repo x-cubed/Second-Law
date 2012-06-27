@@ -26,8 +26,10 @@ namespace SecondLaw {
 					WindowStyle = ProcessWindowStyle.Hidden
 				}
 			};
+			Debug.Print("AdbDaemon.WaitForDevice(): Waiting...");
 			process.Start();
 			process.WaitForExit();
+			Debug.Print("AdbDaemon.WaitForDevice(): Device ready");
 		}
 
 		public static IEnumerable<string> RunADBCommand(string adbArguments, bool throwOnError = false) {
