@@ -120,6 +120,17 @@ namespace SecondLaw {
 			SetLink(lnkVendor, device.Metadata.VendorName, device.Metadata.SupportPage);
 			SetLink(lnkManufacturer, device.Metadata.ManufacturerName ?? props.ProductManufacturer, device.Metadata.ManufacturerPage);
 			picDevice.Image = device.Metadata.DeviceImage;
+
+			byte? batteryCharge = device.BatteryChargePercentage;
+			if (batteryCharge == null) {
+				lbdBatteryCharge.Visible = false;
+				prgBatteryCharge.Visible = false;
+			} else {
+				lbdBatteryCharge.Visible = true;
+				prgBatteryCharge.Visible = true;
+				prgBatteryCharge.Value = batteryCharge.Value;
+				toolTip.SetToolTip(prgBatteryCharge, batteryCharge.Value + "% charged");
+			}
 		}
 
 		private void DisplayTasksForDevice(DeviceInstance device) {

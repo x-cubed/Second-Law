@@ -77,6 +77,8 @@
 			this.lblSerialNumber = new System.Windows.Forms.Label();
 			this.picDevice = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.lbdBatteryCharge = new System.Windows.Forms.Label();
+			this.prgBatteryCharge = new System.Windows.Forms.ProgressBar();
 			this.mnuStrip.SuspendLayout();
 			this.statusBar.SuspendLayout();
 			this.pnlScanning.SuspendLayout();
@@ -248,7 +250,7 @@
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(119, 24);
 			this.aboutToolStripMenuItem.Text = "&About";
 			// 
 			// imlLargeIcons
@@ -410,9 +412,12 @@
 			this.tblDeviceProperties.Controls.Add(this.lbdSystemVersion, 0, 2);
 			this.tblDeviceProperties.Controls.Add(this.lbdVendor, 0, 3);
 			this.tblDeviceProperties.Controls.Add(this.lblSerialNumber, 1, 1);
+			this.tblDeviceProperties.Controls.Add(this.lbdBatteryCharge, 0, 5);
+			this.tblDeviceProperties.Controls.Add(this.prgBatteryCharge, 1, 5);
 			this.tblDeviceProperties.Location = new System.Drawing.Point(15, 307);
 			this.tblDeviceProperties.Name = "tblDeviceProperties";
-			this.tblDeviceProperties.RowCount = 6;
+			this.tblDeviceProperties.RowCount = 7;
+			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
@@ -531,6 +536,24 @@
 			this.picDevice.TabIndex = 2;
 			this.picDevice.TabStop = false;
 			// 
+			// lbdBatteryCharge
+			// 
+			this.lbdBatteryCharge.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lbdBatteryCharge.Location = new System.Drawing.Point(3, 105);
+			this.lbdBatteryCharge.Name = "lbdBatteryCharge";
+			this.lbdBatteryCharge.Size = new System.Drawing.Size(107, 21);
+			this.lbdBatteryCharge.TabIndex = 14;
+			this.lbdBatteryCharge.Text = "Battery:";
+			// 
+			// prgBatteryCharge
+			// 
+			this.prgBatteryCharge.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.prgBatteryCharge.Location = new System.Drawing.Point(116, 108);
+			this.prgBatteryCharge.Name = "prgBatteryCharge";
+			this.prgBatteryCharge.Size = new System.Drawing.Size(105, 15);
+			this.prgBatteryCharge.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.prgBatteryCharge.TabIndex = 15;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -538,8 +561,8 @@
 			this.ClientSize = new System.Drawing.Size(934, 614);
 			this.Controls.Add(this.statusBar);
 			this.Controls.Add(this.mnuStrip);
-			this.Controls.Add(this.pnlScanning);
 			this.Controls.Add(this.pnlDevice);
+			this.Controls.Add(this.pnlScanning);
 			this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.mnuStrip;
@@ -608,6 +631,8 @@
 		private System.Windows.Forms.Label lblSerialNumber;
 		private System.Windows.Forms.PictureBox picDevice;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Label lbdBatteryCharge;
+		private System.Windows.Forms.ProgressBar prgBatteryCharge;
 	}
 }
 
