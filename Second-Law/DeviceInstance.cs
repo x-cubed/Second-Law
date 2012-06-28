@@ -125,6 +125,42 @@ namespace SecondLaw {
 			RunADBCommandReturnString("shell chmod " + mode + " \"" + path + "\"", true);
 		}
 
+		public void ChangeOwner(string owner, string path) {
+			if (owner.Contains("\"") || owner.Contains(" ")) {
+				throw new ArgumentOutOfRangeException("owner", "Can't contain quotes");
+			}
+			if (path.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("path", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			RunADBCommandReturnString("shell chown " + owner + " \"" + path + "\"", true);
+		}
+
+		public void CopyFile(string sourcePath, string destinationPath) {
+			if (sourcePath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("sourcePath", "Can't contain quotes");
+			}
+			if (destinationPath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("destinationPath", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			RunADBCommandReturnString("shell dd if=\"" + sourcePath + "\" of=\"" + destinationPath + "\"", true);
+		}
+
+		public void CreateSymbolicLink(string targetPath, string name) {
+			if (targetPath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("targetPath", "Can't contain quotes");
+			}
+			if (name.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("name", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			RunADBCommandReturnString("shell ln -s \"" + targetPath + "\" \"" + name + "\"", true);
+		}
+
 		public string PushFile(string sourcePath, string destinationPath) {
 			if (sourcePath.Contains("\"")) {
 				throw new ArgumentOutOfRangeException("sourcePath", "Can't contain quotes");
@@ -135,6 +171,15 @@ namespace SecondLaw {
 
 			WaitForDevice();
 			return RunADBCommandReturnString("push \"" + sourcePath + "\" \"" + destinationPath + "\"", false);
+		}
+
+		public void RemoveFile(string path) {
+			if (path.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("path", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			RunADBCommandReturnString("shell rm -r \"" + path + "\"", false);
 		}
 
 		public string InstallPackage(string filePath) {
