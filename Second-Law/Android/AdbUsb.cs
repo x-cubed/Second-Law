@@ -11,7 +11,8 @@ namespace SecondLaw.Android {
 	/// vendor's driver as an ADB device.
 	/// </summary>
 	internal static class AdbUsb {
-		private const string ADB_USB_PATH = @".android\adb_usb.ini";
+		private const string FOLDER_NAME = @".android\";
+		private const string ADB_USB_INI = "adb_usb.ini";
 		private const string HEX_SPECIFIER = "0x";
 
 		public static void WriteVendorIds(IEnumerable<ushort> vendorIds) {
@@ -21,7 +22,13 @@ namespace SecondLaw.Android {
 
 			// Determine where the INI file is
 			var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			var adbUsbIni = new FileInfo(Path.Combine(profilePath, ADB_USB_PATH));
+			var adbUsbIni = new FileInfo(Path.Combine(profilePath, FOLDER_NAME, ADB_USB_INI));
+			if (adbUsbIni.Directory == null) {
+				return;
+			}
+			if (!adbUsbIni.Directory.Exists) {
+				adbUsbIni.Directory.Create();
+			}
 
 			bool endsOnNewLine = true;
 			if (adbUsbIni.Exists) {
@@ -54,7 +61,7 @@ namespace SecondLaw.Android {
 
 			// If we have no IDs left, there's no point writing to the file
 			if (idsToWrite.Count == 0) {
-				Debug.Print("AdbUsb.WriteVendorIds(): adb_usb.ini is up-to-date");
+				Debug.Print("AdbUsb.WriteVendorIds(): {0} is up-to-date", ADB_USB_INI);
 				return;
 			}
 
