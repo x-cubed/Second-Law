@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Management.Automation;
 using System.Management.Automation.Host;
@@ -66,6 +67,7 @@ namespace SecondLaw.PowerShell {
 					_hostUI.Invoke(new Action(() => AddLogItem(item)));
 					return;
 				}
+				Debug.Print("PowerShellUI.AddLogItem(): {0}", item.Text);
 				_hostUI.lsvLog.Items.Add(item);
 				_hostUI.lsvLog.EnsureVisible(_hostUI.lsvLog.Items.Count - 1);
 			}
