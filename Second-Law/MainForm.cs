@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Management.Automation.Runspaces;
-using System.Threading;
 using System.Windows.Forms;
 using SecondLaw.Android;
 using SecondLaw.PowerShell;

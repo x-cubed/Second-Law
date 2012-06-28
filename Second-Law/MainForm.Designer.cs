@@ -75,10 +75,10 @@
 			this.lbdSystemVersion = new System.Windows.Forms.Label();
 			this.lbdVendor = new System.Windows.Forms.Label();
 			this.lblSerialNumber = new System.Windows.Forms.Label();
-			this.picDevice = new System.Windows.Forms.PictureBox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.lbdBatteryCharge = new System.Windows.Forms.Label();
 			this.prgBatteryCharge = new System.Windows.Forms.ProgressBar();
+			this.picDevice = new System.Windows.Forms.PictureBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.mnuStrip.SuspendLayout();
 			this.statusBar.SuspendLayout();
 			this.pnlScanning.SuspendLayout();
@@ -526,16 +526,6 @@
 			this.lblSerialNumber.Text = "(Unknown)";
 			this.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// picDevice
-			// 
-			this.picDevice.BackColor = System.Drawing.Color.White;
-			this.picDevice.Location = new System.Drawing.Point(15, 22);
-			this.picDevice.Name = "picDevice";
-			this.picDevice.Size = new System.Drawing.Size(224, 272);
-			this.picDevice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.picDevice.TabIndex = 2;
-			this.picDevice.TabStop = false;
-			// 
 			// lbdBatteryCharge
 			// 
 			this.lbdBatteryCharge.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -554,6 +544,16 @@
 			this.prgBatteryCharge.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.prgBatteryCharge.TabIndex = 15;
 			// 
+			// picDevice
+			// 
+			this.picDevice.BackColor = System.Drawing.Color.White;
+			this.picDevice.Location = new System.Drawing.Point(15, 22);
+			this.picDevice.Name = "picDevice";
+			this.picDevice.Size = new System.Drawing.Size(224, 272);
+			this.picDevice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.picDevice.TabIndex = 2;
+			this.picDevice.TabStop = false;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -567,6 +567,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.mnuStrip;
 			this.Name = "MainForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Second Law";
 			this.mnuStrip.ResumeLayout(false);
 			this.mnuStrip.PerformLayout();
