@@ -25,6 +25,7 @@ namespace SecondLaw.Android {
 			{ 13, "3.2"}, // Honeycomb
 			{ 14, "4.0"}, // Ice Cream Sandwich
 			{ 15, "4.0.3"}, // Ice Cream Sandwich MR1
+			{ 16, "4.1"}, // Jellybean
 		};
 
 		public BuildProperties(string buildProp) {
