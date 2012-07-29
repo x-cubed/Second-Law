@@ -188,7 +188,7 @@ namespace SecondLaw {
 			}
 
 			WaitForDevice();
-			return RunADBCommandReturnString("install \"" + filePath + "\"", true);
+			return RunADBCommandReturnString("install \"" + filePath + "\"", false);
 		}
 	}
 }
