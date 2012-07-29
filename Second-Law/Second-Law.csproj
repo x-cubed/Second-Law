@@ -138,6 +138,8 @@
     <Content Include="cellphone.ico" />
     <Content Include="Devices\Amazon Kindle Fire\device.jpg" />
     <Content Include="Devices\Amazon Kindle Fire\device.xml" />
+    <Content Include="Devices\Google Galaxy Nexus\device.jpg" />
+    <Content Include="Devices\Google Galaxy Nexus\device.xml" />
     <Content Include="Devices\Motorola Milestone\device.jpg" />
     <Content Include="Devices\Motorola Milestone\device.xml" />
     <Content Include="Devices\Vodafone 845\device.jpg" />

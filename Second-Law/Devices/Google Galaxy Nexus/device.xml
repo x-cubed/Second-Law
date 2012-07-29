@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<device>
+	<name>Galaxy Nexus</name>
+	<model>GT-I9250M</model>
+	<vendor>Google</vendor>
+	<manufacturer>Samsung</manufacturer>
+	<links>
+		<product-page>https://play.google.com/store/devices/details/Galaxy_Nexus_HSPA</product-page>
+		<support-page>http://www.samsung.com/us/support/SupportOwnersFAQPopup.do?faq_id=FAQ00045821&amp;fm_seq=48621</support-page>
+	</links>
+
+	<usb-devices>
+		<device type="root" vendorId="0x04E8" productId="0x6860" />
+		<device type="media-transfer-protocol" vendorId="0x04E8" productId="0x6860" mi="0x00" />
+		<device type="debug-bridge" vendorId="0x04E8" productId="0x6860" mi="0x01" />
+	</usb-devices>
+	
+	<form-factor>phone</form-factor>
+	<screen>
+		<diagonal-size inches="4.65" />
+		<resolution width="720" height="1280" />
+	</screen>
+
+	<has-features>
+		<feature name="wifi" />
+		<feature name="touch" />
+		<feature name="multitouch" />
+		<feature name="phone" />
+		<feature name="3g" />
+		<feature name="front-camera" />
+		<feature name="rear-camera" />
+		<feature name="notification-led" />
+		<feature name="nfc" />
+	</has-features>
+</device>
