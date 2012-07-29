@@ -10,9 +10,10 @@
 	</links>
 
 	<usb-devices>
-		<device type="root" vendorId="0x04E8" productId="0x6860" />
-		<device type="media-transfer-protocol" vendorId="0x04E8" productId="0x6860" mi="0x00" />
-		<device type="debug-bridge" vendorId="0x04E8" productId="0x6860" mi="0x01" />
+		<device type="fast-boot" vendorId="0x18d1" productId="0x4e30" />
+		<device type="root" vendorId="0x04e8" productId="0x6860" />
+		<device type="media-transfer-protocol" vendorId="0x04e8" productId="0x6860" mi="0x00" />
+		<device type="debug-bridge" vendorId="0x04e8" productId="0x6860" mi="0x01" />
 	</usb-devices>
 	
 	<form-factor>phone</form-factor>
