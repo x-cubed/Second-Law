@@ -137,6 +137,7 @@ namespace SecondLaw.PowerShell {
 
 		public void Dispose() {
 			_runspace.Dispose();
+			_hostUI.Close();
 		}
 	}
 }

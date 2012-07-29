@@ -25,11 +25,11 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
-			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
+			System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
+			System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
+			System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
 			this.mnuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mniFileScanForDevices = new System.Windows.Forms.ToolStripMenuItem();
@@ -371,11 +371,11 @@
 			// 
 			this.lsvScripts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lsvScripts.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4,
-            listViewItem5});
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9,
+            listViewItem10});
 			this.lsvScripts.LargeImageList = this.imlLargeIcons;
 			this.lsvScripts.Location = new System.Drawing.Point(265, 50);
 			this.lsvScripts.Margin = new System.Windows.Forms.Padding(3, 25, 3, 3);
@@ -569,6 +569,7 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Second Law";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.mnuStrip.ResumeLayout(false);
 			this.mnuStrip.PerformLayout();
 			this.statusBar.ResumeLayout(false);

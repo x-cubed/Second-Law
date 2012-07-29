@@ -16,6 +16,7 @@ namespace SecondLaw.PowerShell {
 		private readonly Font _boldFont;
 
 		private string _scriptName;
+		private bool _closeRequested;
 
 		public HostUI() {
 			InitializeComponent();
@@ -41,6 +42,20 @@ namespace SecondLaw.PowerShell {
 				return;
 			}
 			butCancel.Visible = false;
+		}
+
+		public new void Close() {
+			_closeRequested = true;
+			base.Close();
+		}
+
+		private void HostUI_FormClosing(object sender, FormClosingEventArgs e) {
+			if (_closeRequested) {
+				_closeRequested = false;
+				return;
+			}
+			e.Cancel = true;
+			Hide();
 		}
 
 		public PSHostUserInterface UI { get; private set; }
@@ -228,11 +243,6 @@ namespace SecondLaw.PowerShell {
 				get { return _hostUI.Text; }
 				set { _hostUI.Text = value; }
 			}
-		}
-
-		private void HostUI_FormClosing(object sender, FormClosingEventArgs e) {
-			e.Cancel = true;
-			Hide();
 		}
 	}
 }

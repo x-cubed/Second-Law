@@ -252,5 +252,9 @@ namespace SecondLaw {
 				new KeyValuePair<string, object>("Device", device)
 			);
 		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {			
+			_psHost.Dispose();
+		}
 	}
 }
