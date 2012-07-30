@@ -31,11 +31,14 @@ namespace SecondLaw {
 			IEnumerable<XmlNode> usbDevices = (xml.SelectNodes("/device/usb-devices/*") ?? (IEnumerable)new XmlNode[0]).Cast<XmlNode>();
 			foreach (var usbDevice in usbDevices) {
 				string type = usbDevice.Attributes["type"].Value;
-				if (type == "debug-bridge") {
-					VendorId = ParseAttributeAsUShort(usbDevice.Attributes["vendorId"], 0);
-					ProductId = ParseAttributeAsUShort(usbDevice.Attributes["productId"], 0);
-					Revision = ParseAttributeAsNullableUShort(usbDevice.Attributes["revision"]);
-					InterfaceId = ParseAttributeAsNullableUShort(usbDevice.Attributes["mi"]);
+				switch (type) {
+					case "root":
+					case "debug-bridge":
+						VendorId = ParseAttributeAsUShort(usbDevice.Attributes["vendorId"], 0);
+						ProductId = ParseAttributeAsUShort(usbDevice.Attributes["productId"], 0);
+						Revision = ParseAttributeAsNullableUShort(usbDevice.Attributes["revision"]);
+						InterfaceId = ParseAttributeAsNullableUShort(usbDevice.Attributes["mi"]);
+						return;
 				}
 			}
 		}
