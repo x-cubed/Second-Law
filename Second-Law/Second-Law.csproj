@@ -148,7 +148,9 @@
     </Content>
     <Content Include="Devices\Vodafone 858\device.jpg" />
     <Content Include="Devices\Vodafone 858\device.xml" />
+    <Content Include="Tasks\Backup\icon.png" />
     <Content Include="Tasks\Install APK\icon.png" />
+    <None Include="Tasks\Backup\task.ps1" />
     <None Include="Tasks\Install APK\task.ps1" />
     <None Include="Tasks\Install Superuser\su" />
     <None Include="Tasks\Install Superuser\Superuser.apk" />

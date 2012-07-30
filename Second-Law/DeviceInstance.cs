@@ -190,5 +190,14 @@ namespace SecondLaw {
 			WaitForDevice();
 			return RunADBCommandReturnString("install \"" + filePath + "\"", false);
 		}
+
+		public IEnumerable<string> Backup(string filePath) {
+			if (filePath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("filePath", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			return RunADBCommand("backup -f \"" + filePath + "\" -apk -noshared -all", false);
+		}
 	}
 }
