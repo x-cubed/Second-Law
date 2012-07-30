@@ -104,7 +104,7 @@ namespace SecondLaw {
 					break;
 			}
 			WaitForDevice();
-			RunADBCommand(command, true);
+			RunADBCommandReturnString(command, true);
 		}
 
 		public void LaunchLogCat() {
