@@ -199,5 +199,14 @@ namespace SecondLaw {
 			WaitForDevice();
 			return RunADBCommand("backup -f \"" + filePath + "\" -apk -noshared -all", false);
 		}
+
+		public IEnumerable<string> Restore(string filePath) {
+			if (filePath.Contains("\"")) {
+				throw new ArgumentOutOfRangeException("filePath", "Can't contain quotes");
+			}
+
+			WaitForDevice();
+			return RunADBCommand("restore \"" + filePath + "\"", false);
+		}
 	}
 }

@@ -150,11 +150,13 @@
     <Content Include="Devices\Vodafone 858\device.xml" />
     <Content Include="Tasks\Backup\icon.png" />
     <Content Include="Tasks\Install APK\icon.png" />
+    <Content Include="Tasks\Restore\icon.png" />
     <None Include="Tasks\Backup\task.ps1" />
     <None Include="Tasks\Install APK\task.ps1" />
     <None Include="Tasks\Install Superuser\su" />
     <None Include="Tasks\Install Superuser\Superuser.apk" />
     <None Include="Tasks\Install Superuser\task.ps1" />
+    <None Include="Tasks\Restore\task.ps1" />
     <None Include="Tasks\Root with zergrush\task.ps1" />
     <None Include="Tasks\Root with zergrush\zergRush" />
     <None Include="TODO.txt" />
