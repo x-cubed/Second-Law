@@ -26,6 +26,7 @@ namespace SecondLaw.Android {
 			{ 14, "4.0"}, // Ice Cream Sandwich
 			{ 15, "4.0.3"}, // Ice Cream Sandwich MR1
 			{ 16, "4.1"}, // Jellybean
+			{ 17, "4.2"} // Jellybean MR1
 		};
 
 		public BuildProperties(string buildProp) {
