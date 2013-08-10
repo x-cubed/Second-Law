@@ -128,8 +128,8 @@ namespace SecondLaw.PowerShell {
 					_hostUI.Invoke(new Action(() => WriteProgress(sourceId, record)));
 					return;
 				}
-
-				AddLogItem(new ListViewItem(record.StatusDescription) { Font = _hostUI._boldFont });
+				
+				AddLogItem(new ListViewItem(record.StatusDescription) {Font = _hostUI._boldFont});
 				if (record.RecordType == ProgressRecordType.Completed) {
 					// Activity is complete, reset to defaults
 					_hostUI.Text = _hostUI._scriptName;

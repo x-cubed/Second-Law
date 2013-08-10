@@ -77,6 +77,7 @@
     <Compile Include="Android\AdbDaemon.cs" />
     <Compile Include="Android\AdbUsb.cs" />
     <Compile Include="Android\BuildProperties.cs" />
+    <Compile Include="Conversions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PowerShell\Host.cs" />
     <Compile Include="PowerShell\HostUI.cs">
@@ -85,6 +86,8 @@
     <Compile Include="PowerShell\HostUI.Designer.cs">
       <DependentUpon>HostUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="PowerShell\ExposedUI.cs" />
+    <Compile Include="Volume.cs" />
     <Compile Include="Windows\Device.cs" />
     <Compile Include="DeviceInstance.cs" />
     <Compile Include="Windows\Hardware.cs" />
@@ -142,7 +145,9 @@
     <Content Include="Devices\Amazon Kindle Fire\device.jpg" />
     <Content Include="Devices\Amazon Kindle Fire\device.xml" />
     <Content Include="Devices\Google Galaxy Nexus\device.jpg" />
-    <Content Include="Devices\Google Galaxy Nexus\device.xml" />
+    <Content Include="Devices\Google Galaxy Nexus\device.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Devices\Motorola Milestone\device.jpg" />
     <Content Include="Devices\Motorola Milestone\device.xml" />
     <Content Include="Devices\Vodafone 845\device.jpg" />

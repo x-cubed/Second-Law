@@ -142,6 +142,21 @@ namespace SecondLaw {
 				prgBatteryCharge.Value = batteryCharge.Value;
 				toolTip.SetToolTip(prgBatteryCharge, batteryCharge.Value + "% charged");
 			}
+
+			Volume volume = device.Volumes.FirstOrDefault();
+			if (volume == null) {
+				lbdDiskUsage.Visible = false;
+				prgDiskUsage.Visible = false;
+			} else {
+				lbdDiskUsage.Visible = true;
+				prgDiskUsage.Visible = true;
+				prgDiskUsage.Value = (int)volume.PercentUsed;
+				toolTip.SetToolTip(prgDiskUsage, string.Format(
+					"{0} of {1}",
+					Conversions.ToSize(volume.SizeUsedBytes),
+					Conversions.ToSize(volume.SizeTotalBytes)
+				));
+			}
 		}
 
 		private void DisplayTasksForDevice(DeviceInstance device) {
@@ -249,7 +264,8 @@ namespace SecondLaw {
 			// Run the script
 			Environment.CurrentDirectory = task.Folder.FullName;
 			_psHost.RunAsync(task.Name, task.ScriptFile, completed,
-				new KeyValuePair<string, object>("Device", device)
+				new KeyValuePair<string, object>("Device", device),
+				new KeyValuePair<string, object>("UI", new ExposedUI(_psHost.UI, _psHost.WindowHandle))
 			);
 		}
 

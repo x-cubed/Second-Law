@@ -51,7 +51,7 @@ namespace SecondLaw.PowerShell {
 			// Hook up event handling for when the pipeline ends			
 			EventHandler<PipelineStateEventArgs> stateChanged = null;
 			stateChanged = (sender, args) => {
-			  Debug.Print("Host.Run.StateChanged(): {0}", args.PipelineStateInfo.State);
+			  Debug.Print("Host.RunAsync().StateChanged(): {0}", args.PipelineStateInfo.State);
 				switch (args.PipelineStateInfo.State) {
 					case PipelineState.Stopped:
 					case PipelineState.Completed:
@@ -68,6 +68,7 @@ namespace SecondLaw.PowerShell {
 			_pipeline.StateChanged += stateChanged;
 
 			// Show the form and execute the script
+			Debug.Print("Host.RunAsync(): Starting script \"{0}\"", title);
 			_hostUI.StartScript(_owner, title);
 			_pipeline.InvokeAsync();
 		}
@@ -125,6 +126,10 @@ namespace SecondLaw.PowerShell {
 
 		public override PSHostUserInterface UI {
 			get { return _hostUI.UI; }
+		}
+
+		public IntPtr WindowHandle {
+			get { return _hostUI.Handle; }
 		}
 
 		public override CultureInfo CurrentCulture {

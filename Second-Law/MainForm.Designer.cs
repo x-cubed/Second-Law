@@ -25,11 +25,11 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
-			System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
-			System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
-			System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Gain root access", "SecurityLock.ico");
+			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Install TWRP Recovery", "ram.ico");
+			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Install CM 7", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Install CM 9", "Setup_Install.ico");
+			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Setup USB Tether", "Dialup.ico");
 			this.mnuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mniFileScanForDevices = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,6 +79,8 @@
 			this.prgBatteryCharge = new System.Windows.Forms.ProgressBar();
 			this.picDevice = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.lbdDiskUsage = new System.Windows.Forms.Label();
+			this.prgDiskUsage = new System.Windows.Forms.ProgressBar();
 			this.mnuStrip.SuspendLayout();
 			this.statusBar.SuspendLayout();
 			this.pnlScanning.SuspendLayout();
@@ -233,12 +235,6 @@
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
 			this.toolStripMenuItem4.Size = new System.Drawing.Size(194, 6);
 			// 
-			// addToolStripMenuItem
-			// 
-			this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-			this.addToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
-			this.addToolStripMenuItem.Text = "&Add repository...";
-			// 
 			// mnuHelp
 			// 
 			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -371,11 +367,11 @@
 			// 
 			this.lsvScripts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lsvScripts.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem6,
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5});
 			this.lsvScripts.LargeImageList = this.imlLargeIcons;
 			this.lsvScripts.Location = new System.Drawing.Point(265, 50);
 			this.lsvScripts.Margin = new System.Windows.Forms.Padding(3, 25, 3, 3);
@@ -414,9 +410,12 @@
 			this.tblDeviceProperties.Controls.Add(this.lblSerialNumber, 1, 1);
 			this.tblDeviceProperties.Controls.Add(this.lbdBatteryCharge, 0, 5);
 			this.tblDeviceProperties.Controls.Add(this.prgBatteryCharge, 1, 5);
+			this.tblDeviceProperties.Controls.Add(this.lbdDiskUsage, 0, 6);
+			this.tblDeviceProperties.Controls.Add(this.prgDiskUsage, 1, 6);
 			this.tblDeviceProperties.Location = new System.Drawing.Point(15, 307);
 			this.tblDeviceProperties.Name = "tblDeviceProperties";
-			this.tblDeviceProperties.RowCount = 7;
+			this.tblDeviceProperties.RowCount = 8;
+			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tblDeviceProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
@@ -554,6 +553,24 @@
 			this.picDevice.TabIndex = 2;
 			this.picDevice.TabStop = false;
 			// 
+			// lbdDiskUsage
+			// 
+			this.lbdDiskUsage.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lbdDiskUsage.Location = new System.Drawing.Point(3, 126);
+			this.lbdDiskUsage.Name = "lbdDiskUsage";
+			this.lbdDiskUsage.Size = new System.Drawing.Size(107, 21);
+			this.lbdDiskUsage.TabIndex = 17;
+			this.lbdDiskUsage.Text = "Disk Usage:";
+			// 
+			// prgDiskUsage
+			// 
+			this.prgDiskUsage.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.prgDiskUsage.Location = new System.Drawing.Point(116, 129);
+			this.prgDiskUsage.Name = "prgDiskUsage";
+			this.prgDiskUsage.Size = new System.Drawing.Size(105, 15);
+			this.prgDiskUsage.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.prgDiskUsage.TabIndex = 18;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -635,6 +652,8 @@
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label lbdBatteryCharge;
 		private System.Windows.Forms.ProgressBar prgBatteryCharge;
+		private System.Windows.Forms.Label lbdDiskUsage;
+		private System.Windows.Forms.ProgressBar prgDiskUsage;
 	}
 }
 

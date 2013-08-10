@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SecondLaw.Android;
 using SecondLaw.Windows;
 
@@ -11,6 +12,9 @@ namespace SecondLaw {
 		private const string BATTERY_CAPACITY = "/power_supply/battery/capacity";
 		private const string BATTERY_STATUS = "/power_supply/battery/status";
 
+		private static readonly Regex DF_OUTPUT = new Regex(@"(.+?)\s+([\d\.]+[KMGT])\s+([\d\.]+[KMGT])\s+([\d\.]+[KMGT])\s+(\d+)", RegexOptions.Compiled);
+
+		private readonly List<Volume> _volumes = new List<Volume>();
 		private string _batteryDevicePath;
 
 		internal DeviceInstance(SupportedDevice metadata, UsbDevice usbDevice) {
@@ -20,6 +24,7 @@ namespace SecondLaw {
 
 		public void LoadDeviceInformation() {
 			BuildProperties = GetBuildProperties();
+			EnumerateVolumes();
 
 			// Find the battery device
 			IEnumerable<string> devices = RunShellCommand("ls -1 " + PLATFORM_DEVICES);
@@ -29,10 +34,28 @@ namespace SecondLaw {
 			}
 		}
 
+		private void EnumerateVolumes() {
+			string dfOutput = RunShellCommand("df | grep /data").FirstOrDefault() ?? "";
+			var match = DF_OUTPUT.Match(dfOutput);
+			if (match.Success) {
+				var volume = new Volume(match.Groups[1].Value) {
+					SizeTotalBytes = Conversions.ParseSize(match.Groups[2].Value),
+					SizeUsedBytes = Conversions.ParseSize(match.Groups[3].Value),
+					BlockSizeBytes = Conversions.ParseSize(match.Groups[4].Value)
+				};
+				Debug.Assert(volume.SizeUsedBytes <= volume.SizeTotalBytes, "More space is used than exists");
+				_volumes.Add(volume);
+			}
+		}
+
 		public SupportedDevice Metadata { get; private set; }
 		public UsbDevice UsbDevice { get; private set; }
 
 		public BuildProperties BuildProperties { get; private set; }
+
+		public IList<Volume> Volumes {
+			get { return _volumes; }
+		} 
 
 		public void WaitForDevice() {
 			AdbDaemon.WaitForDevice();
@@ -197,7 +220,7 @@ namespace SecondLaw {
 			}
 
 			WaitForDevice();
-			return RunADBCommand("backup -f \"" + filePath + "\" -apk -noshared -all", false);
+			return RunADBCommand("backup -f \"" + filePath + "\" -apk -system -shared -all", false);
 		}
 
 		public IEnumerable<string> Restore(string filePath) {

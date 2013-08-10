@@ -59,6 +59,7 @@ namespace SecondLaw {
 					while (!output.EndOfStream) {
 						string line = output.ReadLine();
 						if (!string.IsNullOrEmpty(line)) {
+							Debug.Print("ADB: {0}", line);
 							yield return line;
 						}
 					}
@@ -66,6 +67,7 @@ namespace SecondLaw {
 					if (throwOnError) {
 						string errors = error.ReadToEnd();
 						if (!string.IsNullOrEmpty(errors)) {
+							Debug.Print("ADB ERROR: {0}", errors);
 							throw new Exception(errors);
 						}
 						yield break;
@@ -74,6 +76,7 @@ namespace SecondLaw {
 					while (!error.EndOfStream) {
 						string line = error.ReadLine();
 						if (!string.IsNullOrEmpty(line)) {
+							Debug.Print("ADB ERROR: {0}", line);
 							yield return line;
 						}
 					}

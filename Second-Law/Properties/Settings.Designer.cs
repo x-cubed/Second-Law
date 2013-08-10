@@ -25,7 +25,7 @@ namespace SecondLaw.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Android\\android-sdk\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\android-sdk\\")]
         public string PathToADK {
             get {
                 return ((string)(this["PathToADK"]));
